@@ -22,24 +22,73 @@ let users = [
 
 let movies = [
   {
-  "Title":"Top Gun",
-  "Description": "A modern action movie",
-  "Genre": {"Name":"Action"},
-  
-  
-              "The Little Mermaid",
-              "Barbie (2024)",
-              "Twisters",
-              "The Notebook",
-              "Titanic",
-              "Pretty Woman",
-              "How to Lose a Guy in 10 Days",
-              "Pretty in Pink",
-              "Anyone But You",
-              "The Wedding Planner"
+    Title: "Top Gun",
+    Description: "A modern action movie about elite naval aviators.",
+    Genre: { Name: "Action" },
+    Director: { Name: "Tony Scott" }
   },
-  
-  ];
+  {
+    Title: "The Little Mermaid",
+    Description: "A Disney animated classic about a young mermaid's adventures.",
+    Genre: { Name: "Fantasy" },
+    Director: { Name: "Ron Clements" }
+  },
+  {
+    Title: "Barbie (2024)",
+    Description: "A live-action adaptation that explores Barbie's world and adventures.",
+    Genre: { Name: "Adventure" },
+    Director: { Name: "Greta Gerwig" }
+  },
+  {
+    Title: "Twisters",
+    Description: "A thrilling movie about storm chasers facing nature's wrath.",
+    Genre: { Name: "Drama" },
+    Director: { Name: "Jan de Bont" }
+  },
+  {
+    Title: "The Notebook",
+    Description: "A romantic drama about a love story that transcends time.",
+    Genre: { Name: "Romance" },
+    Director: { Name: "Nick Cassavetes" }
+  },
+  {
+    Title: "Titanic",
+    Description: "A historical romance set against the tragic sinking of the Titanic.",
+    Genre: { Name: "Romance" },
+    Director: { Name: "James Cameron" }
+  },
+  {
+    Title: "Pretty Woman",
+    Description: "A romantic comedy about a chance encounter that changes two lives.",
+    Genre: { Name: "Romantic Comedy" },
+    Director: { Name: "Garry Marshall" }
+  },
+  {
+    Title: "How to Lose a Guy in 10 Days",
+    Description: "A humorous tale about a woman writing an article on dating gone wrong.",
+    Genre: { Name: "Romantic Comedy" },
+    Director: { Name: "Donald Petrie" }
+  },
+  {
+    Title: "Pretty in Pink",
+    Description: "A coming-of-age story about love and social class differences.",
+    Genre: { Name: "Romantic Comedy" },
+    Director: { Name: "Howard Deutch" }
+  },
+  {
+    Title: "Anyone But You",
+    Description: "A romantic comedy about two people who seem mismatched in every way.",
+    Genre: { Name: "Romantic Comedy" },
+    Director: { Name: "Will Gluck" }
+  },
+  {
+    Title: "The Wedding Planner",
+    Description: "A romantic comedy about a wedding planner who finds herself falling for the groom.",
+    Genre: { Name: "Romantic Comedy" },
+    Director: { Name: "Adam Shankman" }
+  }
+];
+
 
 
 
