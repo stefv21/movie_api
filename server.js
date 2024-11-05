@@ -1,51 +1,37 @@
-const http = require('http');
-
-http.createServer((request, response) => {
-  response.writeHead(200, {'Content-Type': 'text/plain'});
-  response.end('Hello Node!\n');
-}).listen(8080);
-
-console.log('My first Node test server is running on Port 8080.');
-
-///
-
-const http = require('http');
+const express = require('express');
 const fs = require('fs');
-const url = require('url');
+const path = require('path');
+const app = express();
+const port = 8080;
 
+// Route to handle the root URL
+app.get('/', (req, res) => {
+  res.send('Hello World!');
+});
 
-http.createServer((request, response) => {
-  let addr = request.url,  
-      q = new URL(addr, 'http://' + request.headers.host),  // Parse the URL
-      filePath = '';  
-
-  // Log the URL and timestamp to log.txt
-  fs.appendFile('log.txt', `URL: ${addr}\nTimestamp: ${new Date()}\n\n`, (err) => {
-    if (err) {
-      console.log('Error logging request:', err);
-    } else {
-      console.log('Request logged.');
-    }
-  });
-
-  // Set the file path based on the URL path
-  if (q.pathname.includes('documentation')) {
-    filePath = __dirname + '/documentation.html';
-  } else {
-    filePath = 'index.html';
-  }
-
-  // Read and serve the requested file
+// Route for documentation page
+app.get('/documentation', (req, res) => {
+  const filePath = path.join(__dirname, 'documentation.html');
   fs.readFile(filePath, (err, data) => {
     if (err) {
-      response.writeHead(404, { 'Content-Type': 'text/html' });
-      response.end('<h1>404 Not Found</h1>');
+      res.status(404).send('<h1>404 Not Found</h1>');
     } else {
-      response.writeHead(200, { 'Content-Type': 'text/html' });
-      response.end(data);
+      res.writeHead(200, { 'Content-Type': 'text/html' });
+      res.end(data);
     }
   });
+});
 
-}).listen(8080);
+// Log each request's URL and timestamp
+app.use((req, res, next) => {
+  const logMessage = `URL: ${req.url}\nTimestamp: ${new Date()}\n\n`;
+  fs.appendFile('log.txt', logMessage, (err) => {
+    if (err) console.log('Error logging request:', err);
+  });
+  next();
+});
 
-console.log('Server running on http://localhost:8080');
+// Start the server
+app.listen(port, () => {
+  console.log(`Server is running on http://localhost:${port}`);
+});
