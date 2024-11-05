@@ -4,6 +4,64 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Movies API Documentation</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f4f4f4;
+      color: #333;
+    }
+    h1 {
+      color: #2c3e50;
+    }
+    h2 {
+      color: #2980b9;
+      border-bottom: 2px solid #2980b9;
+      padding-bottom: 10px;
+    }
+    h3 {
+      color: #27ae60;
+    }
+    p {
+      line-height: 1.6;
+    }
+    pre {
+      background-color: #e7e7e7;
+      border-left: 4px solid #2980b9;
+      padding: 10px;
+      overflow: auto;
+    }
+    code {
+      background-color: #e7e7e7;
+      padding: 2px 4px;
+      border-radius: 4px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      background-color: #fff;
+    }
+    th, td {
+      padding: 10px;
+      border: 1px solid #ddd;
+      text-align: left;
+    }
+    th {
+      background-color: #2980b9;
+      color: white;
+    }
+    tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+    tr:hover {
+      background-color: #f1c40f;
+    }
+  </style>
+
+
 </head>
 <body>
   <h1>Movies API</h1>
@@ -17,57 +75,60 @@
     This document will be updated as development progresses to provide instructions on using the API, including details on routes, HTTP methods, and expected responses.
   </p>
 
-  <h2>Current API Status</h2>
-  <p>As of now, the API provides the following basic functionality:</p>
-  <ul>
-    <li><strong>GET /</strong>: Serves the homepage (index.html).</li>
-    <li><strong>GET /documentation</strong>: Serves this documentation page.</li>
-    <li>More features (like user registration and movie management) will be added soon!</li>
-  </ul>
 
   <h2>API Endpoints</h2>
   <p>This API exposes a number of endpoints that allow interaction with movie and user data:</p>
 
   <h3>1. CREATE a new user</h3>
-  <p><strong>Endpoint URL:</strong> <code>/users</code></p>
-  <p><strong>Method Type:</strong> POST</p>
-  <p><strong>Description:</strong> This endpoint creates a new user. The user will be assigned a unique ID and can later be used for managing their favorite movies.</p>
-  <p><strong>Request Body Format:</strong></p>
-  <pre>
+
+<p><strong>Endpoint URL:</strong> <code>/users</code></p>
+<p><strong>Method Type:</strong> POST</p>
+<p><strong>High-level Description:</strong> This endpoint allows you to create a new user by providing a name in the request body. The server generates a unique ID for the user, adds them to the list, and returns the new user object. If the name is not provided, an error message is returned.</p>
+<p><strong>Query Parameters:</strong> None</p>
+<p><strong>Request Body Format:</strong></p>
+<pre>
 {
-  "name": "John Doe"
+  "name": "Mary"
 }
-  </pre>
-  <p><strong>Response Data Format:</strong></p>
-  <pre>
+</pre>
+<p><strong>Example Request:</strong></p>
+<pre>
+POST /users
 {
-  "id": "some-unique-id",
-  "name": "John Doe"
+  "name": "Mary"
 }
-  </pre>
+</pre>
+<p><strong>Response Data Format:</strong></p>
+<pre>
+{
+  "id": "b3a84f9c-bde4-42c7-b9b2-5b4b635b9e1d",
+  "name": "Mary"
+}
+</pre>
+
 
   <h3>2. UPDATE user details</h3>
   <p><strong>Endpoint URL:</strong> <code>/users/:id</code></p>
   <p><strong>Method Type:</strong> PUT</p>
-  <p><strong>Description:</strong> This endpoint updates the name of an existing user based on their unique ID.</p>
+  <p><strong>High-level Description:</strong> This endpoint allows you to update the details (like name) of an existing user identified by their unique user ID. It modifies the user's information based on the provided data in the request body.</p>
   <p><strong>Request Body Format:</strong></p>
   <pre>
 {
-  "name": "Jane Doe"
+  "name": "Jane"
 }
   </pre>
   <p><strong>Response Data Format:</strong></p>
   <pre>
 {
   "id": "existing-id",
-  "name": "Jane Doe"
+  "name": "Jane"
 }
   </pre>
 
   <h3>3. CREATE a movie in a user's favorite list</h3>
   <p><strong>Endpoint URL:</strong> <code>/users/:id/movieTitle</code></p>
   <p><strong>Method Type:</strong> POST</p>
-  <p><strong>Description:</strong> Adds a movie to the user's list of favorite movies. The movie is specified by the <code>movieTitle</code> parameter.</p>
+  <p><strong>High-level Description:</strong> This endpoint allows you to add a movie to the user's list of favorite movies. The movie is specified by the <code>movieTitle</code> parameter. It returns a confirmation message upon successfully adding the movie.</p>
   <p><strong>Request Body Format:</strong> None (movie title is passed as a URL parameter)</p>
   <p><strong>Response Data Format:</strong></p>
   <pre>
@@ -79,7 +140,7 @@
   <h3>4. DELETE a movie from a user's favorite list</h3>
   <p><strong>Endpoint URL:</strong> <code>/users/:id/movieTitle</code></p>
   <p><strong>Method Type:</strong> DELETE</p>
-  <p><strong>Description:</strong> Removes a movie from the user's list of favorite movies.</p>
+  <p><strong>High-level Description:</strong> This endpoint allows you to remove a movie from the user's list of favorite movies. The movie is identified by the <code>movieTitle</code> parameter, which is passed in the URL. It returns a confirmation message upon successful removal.</p>
   <p><strong>Request Body Format:</strong> None (movie title is passed as a URL parameter)</p>
   <p><strong>Response Data Format:</strong></p>
   <pre>
@@ -91,7 +152,7 @@
   <h3>5. DELETE a user</h3>
   <p><strong>Endpoint URL:</strong> <code>/users/:id</code></p>
   <p><strong>Method Type:</strong> DELETE</p>
-  <p><strong>Description:</strong> Deletes a user from the database based on their unique ID.</p>
+  <p><strong>High-level Description:</strong> This endpoint deletes a user based on their unique ID. The user is removed from the database, and a confirmation message is returned.</p>
   <p><strong>Response Data Format:</strong></p>
   <pre>
 {
@@ -102,7 +163,7 @@
   <h3>6. GET all movies</h3>
   <p><strong>Endpoint URL:</strong> <code>/movies</code></p>
   <p><strong>Method Type:</strong> GET</p>
-  <p><strong>Description:</strong> Returns a list of all available movies in the database.</p>
+  <p><strong>High-level Description:</strong> This endpoint returns a list of all available movies in the database. It does not require any parameters and is used to retrieve all movie records.</p>
   <p><strong>Response Data Format:</strong></p>
   <pre>
 [
@@ -119,7 +180,7 @@
   <h3>7. GET a movie by title</h3>
   <p><strong>Endpoint URL:</strong> <code>/movies/:title</code></p>
   <p><strong>Method Type:</strong> GET</p>
-  <p><strong>Description:</strong> Fetches details of a specific movie based on its title.</p>
+  <p><strong>High-level Description:</strong> This endpoint allows you to fetch details of a specific movie based on its title. It retrieves the movie's description, genre, and director.</p>
   <p><strong>Response Data Format:</strong></p>
   <pre>
 {
@@ -133,7 +194,7 @@
   <h3>8. GET movies by genre</h3>
   <p><strong>Endpoint URL:</strong> <code>/movies/genre/:genreName</code></p>
   <p><strong>Method Type:</strong> GET</p>
-  <p><strong>Description:</strong> Returns all movies belonging to a specified genre.</p>
+  <p><strong>High-level Description:</strong> This endpoint retrieves all movies that belong to a specific genre. The genre name is passed as a parameter.</p>
   <p><strong>Response Data Format:</strong></p>
   <pre>
 [
@@ -150,7 +211,7 @@
   <h3>9. GET movies by director</h3>
   <p><strong>Endpoint URL:</strong> <code>/movies/directors/:directorName</code></p>
   <p><strong>Method Type:</strong> GET</p>
-  <p><strong>Description:</strong> Fetches all movies directed by a specific director.</p>
+  <p><strong>High-level Description:</strong> This endpoint allows you to fetch all movies directed by a specific director. It retrieves movies by their director's name, returned as an array of movie objects.</p>
   <p><strong>Response Data Format:</strong></p>
   <pre>
 [
@@ -162,6 +223,18 @@
   },
   ...
 ]
+  </pre>
+
+
+
+  <h2>Global Response Format</h2>
+  <p>All API responses are formatted in JSON and typically contain the following structure:</p>
+  <pre>
+  {
+    "status": "success", // or "error" in case of failure
+    "message": "Descriptive message for success/error",
+    "data": { /* Actual response data */ }
+  }
   </pre>
 
 </body>
