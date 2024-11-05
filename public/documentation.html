@@ -24,5 +24,145 @@
     <li><strong>GET /documentation</strong>: Serves this documentation page.</li>
     <li>More features (like user registration and movie management) will be added soon!</li>
   </ul>
+
+  <h2>API Endpoints</h2>
+  <p>This API exposes a number of endpoints that allow interaction with movie and user data:</p>
+
+  <h3>1. CREATE a new user</h3>
+  <p><strong>Endpoint URL:</strong> <code>/users</code></p>
+  <p><strong>Method Type:</strong> POST</p>
+  <p><strong>Description:</strong> This endpoint creates a new user. The user will be assigned a unique ID and can later be used for managing their favorite movies.</p>
+  <p><strong>Request Body Format:</strong></p>
+  <pre>
+{
+  "name": "John Doe"
+}
+  </pre>
+  <p><strong>Response Data Format:</strong></p>
+  <pre>
+{
+  "id": "some-unique-id",
+  "name": "John Doe"
+}
+  </pre>
+
+  <h3>2. UPDATE user details</h3>
+  <p><strong>Endpoint URL:</strong> <code>/users/:id</code></p>
+  <p><strong>Method Type:</strong> PUT</p>
+  <p><strong>Description:</strong> This endpoint updates the name of an existing user based on their unique ID.</p>
+  <p><strong>Request Body Format:</strong></p>
+  <pre>
+{
+  "name": "Jane Doe"
+}
+  </pre>
+  <p><strong>Response Data Format:</strong></p>
+  <pre>
+{
+  "id": "existing-id",
+  "name": "Jane Doe"
+}
+  </pre>
+
+  <h3>3. CREATE a movie in a user's favorite list</h3>
+  <p><strong>Endpoint URL:</strong> <code>/users/:id/movieTitle</code></p>
+  <p><strong>Method Type:</strong> POST</p>
+  <p><strong>Description:</strong> Adds a movie to the user's list of favorite movies. The movie is specified by the <code>movieTitle</code> parameter.</p>
+  <p><strong>Request Body Format:</strong> None (movie title is passed as a URL parameter)</p>
+  <p><strong>Response Data Format:</strong></p>
+  <pre>
+{
+  "message": "Movie has been added to user 123's favorite list."
+}
+  </pre>
+
+  <h3>4. DELETE a movie from a user's favorite list</h3>
+  <p><strong>Endpoint URL:</strong> <code>/users/:id/movieTitle</code></p>
+  <p><strong>Method Type:</strong> DELETE</p>
+  <p><strong>Description:</strong> Removes a movie from the user's list of favorite movies.</p>
+  <p><strong>Request Body Format:</strong> None (movie title is passed as a URL parameter)</p>
+  <p><strong>Response Data Format:</strong></p>
+  <pre>
+{
+  "message": "Movie has been removed from user 123's favorite list."
+}
+  </pre>
+
+  <h3>5. DELETE a user</h3>
+  <p><strong>Endpoint URL:</strong> <code>/users/:id</code></p>
+  <p><strong>Method Type:</strong> DELETE</p>
+  <p><strong>Description:</strong> Deletes a user from the database based on their unique ID.</p>
+  <p><strong>Response Data Format:</strong></p>
+  <pre>
+{
+  "message": "User 123 has been deleted."
+}
+  </pre>
+
+  <h3>6. GET all movies</h3>
+  <p><strong>Endpoint URL:</strong> <code>/movies</code></p>
+  <p><strong>Method Type:</strong> GET</p>
+  <p><strong>Description:</strong> Returns a list of all available movies in the database.</p>
+  <p><strong>Response Data Format:</strong></p>
+  <pre>
+[
+  {
+    "Title": "Top Gun",
+    "Description": "A modern action movie about elite naval aviators.",
+    "Genre": {"Name": "Action"},
+    "Director": {"Name": "Tony Scott"}
+  },
+  ...
+]
+  </pre>
+
+  <h3>7. GET a movie by title</h3>
+  <p><strong>Endpoint URL:</strong> <code>/movies/:title</code></p>
+  <p><strong>Method Type:</strong> GET</p>
+  <p><strong>Description:</strong> Fetches details of a specific movie based on its title.</p>
+  <p><strong>Response Data Format:</strong></p>
+  <pre>
+{
+  "Title": "Top Gun",
+  "Description": "A modern action movie about elite naval aviators.",
+  "Genre": {"Name": "Action"},
+  "Director": {"Name": "Tony Scott"}
+}
+  </pre>
+
+  <h3>8. GET movies by genre</h3>
+  <p><strong>Endpoint URL:</strong> <code>/movies/genre/:genreName</code></p>
+  <p><strong>Method Type:</strong> GET</p>
+  <p><strong>Description:</strong> Returns all movies belonging to a specified genre.</p>
+  <p><strong>Response Data Format:</strong></p>
+  <pre>
+[
+  {
+    "Title": "Top Gun",
+    "Description": "A modern action movie about elite naval aviators.",
+    "Genre": {"Name": "Action"},
+    "Director": {"Name": "Tony Scott"}
+  },
+  ...
+]
+  </pre>
+
+  <h3>9. GET movies by director</h3>
+  <p><strong>Endpoint URL:</strong> <code>/movies/directors/:directorName</code></p>
+  <p><strong>Method Type:</strong> GET</p>
+  <p><strong>Description:</strong> Fetches all movies directed by a specific director.</p>
+  <p><strong>Response Data Format:</strong></p>
+  <pre>
+[
+  {
+    "Title": "Top Gun",
+    "Description": "A modern action movie about elite naval aviators.",
+    "Genre": {"Name": "Action"},
+    "Director": {"Name": "Tony Scott"}
+  },
+  ...
+]
+  </pre>
+
 </body>
 </html>
