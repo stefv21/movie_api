@@ -89,6 +89,53 @@ let movies = [
   }
 ];
 
+// READ
+app.get ('/movies', (req,res) => {
+  res.status(200).json(movies);
+  
+  })
+
+
+  // READ
+app.get ('/movies/:title', (req,res) => {
+  const { title } = req.params;
+  const movie = movies.find (movie => movie.Title === title ); 
+  
+  if (movie) {
+    res.status(200).json (movie);
+  } else {
+    res.status(400).send('no such movie')
+  }
+  
+  })
+
+
+//Read
+app.get ('/movies/genre/:genreName', (req,res) => {
+  const { genreName } = req.params;
+  const genre = movies.find (movie => movie.Genre.Name === genreName ).Genre;
+  
+  if (genre) {
+    res.status(200).json (genre);
+  } else {
+    res.status(400).send('no such movie')
+  }
+  
+  })
+
+
+  //Read
+app.get ('/movies/directors/:directorName', (req,res) => {
+  const { directorName } = req.params;
+  const director = movies.find (movie => movie.Director.Name === directorName ).Director;
+  
+  if (genre) {
+    res.status(200).json (director);
+  } else {
+    res.status(400).send('no such director')
+  }
+  
+  })
 
 
 
@@ -175,52 +222,9 @@ app.delete('/users/:id', (req, res) => {
     }
   })
 
+  app.listen(8080, () => console.log ("listening on 8080"))
 
 
 
-// READ
-app.get ('/movies', (req,res) => {
-res.status(200).json(movies);
-
-})
-
-// READ
-app.get ('/movies/:title', (req,res) => {
-const { title } = req.params;
-const movie = movies.find (movie => movie.Title === title ); 
-
-if (movie) {
-  res.status(200).json (movie);
-} else {
-  res.status(400).send('no such movie')
-}
-
-})
-
-//Read
-app.get ('/movies/genre/:genreName', (req,res) => {
-  const { genreName } = req.params;
-  const genre = movies.find (movie => movie.Genre.Name === genreName ).Genre;
-  
-  if (genre) {
-    res.status(200).json (genre);
-  } else {
-    res.status(400).send('no such movie')
-  }
-  
-  })
-
-//Read
-app.get ('/movies/directors/:directorName', (req,res) => {
-  const { directorname } = req.params;
-  const director = movies.find (movie => movie.Director.Name === directorName ).Director;
-  
-  if (genre) {
-    res.status(200).json (director);
-  } else {
-    res.status(400).send('no such director')
-  }
-  
-  })
 
  
