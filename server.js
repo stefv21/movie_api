@@ -129,7 +129,7 @@ app.get ('/movies/directors/:directorName', (req,res) => {
   const { directorName } = req.params;
   const director = movies.find (movie => movie.Director.Name === directorName ).Director;
   
-  if (genre) {
+  if (director) {
     res.status(200).json (director);
   } else {
     res.status(400).send('no such director')
@@ -174,7 +174,7 @@ if (user) {
 
 
 // CREATE
-app.post('/users/:id/movieTitle', (req, res) => {
+app.post('/users/:id/:movieTitle', (req, res) => {
   const { id, movieTitle } = req.params;
   
   let user = users.find( user => user.id == id);
@@ -190,7 +190,7 @@ app.post('/users/:id/movieTitle', (req, res) => {
 
 
   // DELETE
-app.delete('/users/:id/movieTitle', (req, res) => {
+app.delete('/users/:id/:movieTitle', (req, res) => {
   const { id, movieTitle } = req.params;
   
   let user = users.find( user => user.id == id);
