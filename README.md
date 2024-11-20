@@ -45,14 +45,6 @@
       <li><strong>DELETE /users/:Username:</strong> Delete a user by username</li>
     </ul>
 
-    <h3>Movies</h3>
-    <ul>
-      <li><strong>POST /movies/create:</strong> Add a new movie</li>
-      <li><strong>GET /movies:</strong> Get all movies</li>
-      <li><strong>GET /movies/:id:</strong> Get a movie by ID</li>
-      <li><strong>PUT /movies/:id:</strong> Update a movie by ID</li>
-      <li><strong>DELETE /movies/:id:</strong> Delete a movie by ID</li>
-    </ul>
   </div>
 
   <div class="section">
