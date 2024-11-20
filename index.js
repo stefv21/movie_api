@@ -4,12 +4,14 @@ const Models = require('./models.js');
 const Movies = Models.Movie;
 const Users = Models.User;
 
-mongoose.connect('mongodb://localhost:27017/db', { useNewUrlParser: true, useUnifiedTopology: true });
 
 const express = require('express');
 const morgan = require('morgan'); 
 const app = express();
 const PORT = 8080;
+
+mongoose.connect('mongodb://localhost:27017/db', { useNewUrlParser: true, useUnifiedTopology: true });
+
 
 app.use(express.json()); 
 app.use(express.urlencoded({ extended: true }));
@@ -26,16 +28,8 @@ app.get('/', (req, res) => {
 });
 
 
-//
-//Add a user
-/* We’ll expect JSON in this format
-{
-  ID: Integer,
-  Username: String,
-  Password: String,
-  Email: String,
-  Birthday: Date
-}*/
+// CREATE
+
 app.post('/users', async (req, res) => {
     await Users.findOne({ Username: req.body.Username })
       .then((user) => {
@@ -62,7 +56,21 @@ app.post('/users', async (req, res) => {
       });
   });
 
-//
+
+  // Create: Add a new movie
+app.post('/movies', async (req, res) => {
+  const { Title, Genre, Description } = req.body;
+  try {
+      const newMovie = await Movies.create({ Title, Genre, Description });
+      res.status(201).json(newMovie);
+  } catch (error) {
+      console.error(error);
+      res.status(500).send('Error: ' + error);
+  }
+});
+
+
+//READ
 
 app.get('/users', async (req, res) => {
     await Users.find()
@@ -75,8 +83,8 @@ app.get('/users', async (req, res) => {
       });
   });
 
-  // 
-
+  
+  
 app.get('/users/:Username', async (req, res) => {
     await Users.findOne({ Username: req.params.Username })
       .then((user) => {
@@ -88,6 +96,30 @@ app.get('/users/:Username', async (req, res) => {
       });
   });
 
+// Read: Get all movies
+app.get('/movies', async (req, res) => {
+  try {
+      const movies = await Movies.find();
+      res.status(200).json(movies);
+  } catch (err) {
+      console.error(err);
+      res.status(500).send('Error: ' + err);
+  }
+});
+
+// Read: Get a movie by ID
+app.get('/movies/:id', async (req, res) => {
+  try {
+      const movie = await Movies.findById(req.params.id);
+      if (!movie) {
+          return res.status(404).send('Movie not found');
+      }
+      res.status(200).json(movie);
+  } catch (err) {
+      console.error(err);
+      res.status(500).send('Error: ' + err);
+  }
+});
 
   
 app.get('/movies', (req, res) => {
@@ -107,6 +139,77 @@ app.get('/movies', (req, res) => {
         ]
     });
 });
+
+//UPDATE
+app.put('/users/:Username', async (req, res) => {
+  const { Password, Email, Birthday } = req.body;
+  try {
+      const user = await Users.findOneAndUpdate(
+          { Username: req.params.Username },
+          { Password, Email, Birthday },
+          { new: true } // To return the updated document
+      );
+      if (!user) {
+          return res.status(404).send('User not found');
+      }
+      res.status(200).json(user);
+  } catch (err) {
+      console.error(err);
+      res.status(500).send('Error: ' + err);
+  }
+});
+
+app.put('/movies/:id', async (req, res) => {
+  const { Title, Genre, Description } = req.body;
+  try {
+      const movie = await Movies.findByIdAndUpdate(
+          req.params.id,
+          { Title, Genre, Description },
+          { new: true } // To return the updated document
+      );
+      if (!movie) {
+          return res.status(404).send('Movie not found');
+      }
+      res.status(200).json(movie);
+  } catch (err) {
+      console.error(err);
+      res.status(500).send('Error: ' + err);
+  }
+});
+
+
+
+
+
+// DELETE
+app.delete('/users/:Username', async (req, res) => {
+  try {
+      const user = await Users.findOneAndDelete({ Username: req.params.Username });
+      if (!user) {
+          return res.status(404).send('User not found');
+      }
+      res.status(200).send(`User ${req.params.Username} deleted`);
+  } catch (err) {
+      console.error(err);
+      res.status(500).send('Error: ' + err);
+  }
+});
+
+
+app.delete('/movies/:id', async (req, res) => {
+  try {
+      const movie = await Movies.findByIdAndDelete(req.params.id);
+      if (!movie) {
+          return res.status(404).send('Movie not found');
+      }
+      res.status(200).send(`Movie with ID ${req.params.id} deleted`);
+  } catch (err) {
+      console.error(err);
+      res.status(500).send('Error: ' + err);
+  }
+});
+
+
 
 
 app.use((err, req, res, next) => {
