@@ -170,31 +170,6 @@
     </ul>
   </div>
 
-  <div class="section">
-    <h2>Installation</h2>
-    <ol class="install-steps">
-      <li>Clone the repository:
-        <div class="code-block">
-          <code>git clone https://github.com/your-username/movie-api.git</code>
-        </div>
-      </li>
-      <li>Navigate to the project directory:
-        <div class="code-block">
-          <code>cd movie-api</code>
-        </div>
-      </li>
-      <li>Install dependencies:
-        <div class="code-block">
-          <code>npm install</code>
-        </div>
-      </li>
-      <li>Run the application:
-        <div class="code-block">
-          <code>npm start</code>
-        </div>
-      </li>
-    </ol>
-  </div>
 
   <footer>
     <p>Project licensed under the MIT License. See <a href="#">LICENSE</a> for details.</p>
