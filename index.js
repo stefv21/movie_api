@@ -27,6 +27,7 @@ app.get('/', (req, res) => {
     res.send('Welcome to my Movie API! Here you can find a list of my top 10 movies.');
 });
 
+let auth = require('./auth')(app);
 
 // CREATE
 
