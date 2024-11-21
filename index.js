@@ -7,27 +7,31 @@ const Users = Models.User;
 
 const express = require('express');
 const morgan = require('morgan'); 
+const passport = require('passport');
 const app = express();
 const PORT = 8080;
+
 
 mongoose.connect('mongodb://localhost:27017/db', { useNewUrlParser: true, useUnifiedTopology: true });
 
 
 app.use(express.json()); 
 app.use(express.urlencoded({ extended: true }));
-
-// Use Morgan middleware to log requests
 app.use(morgan('dev'));
-
-
 app.use(express.static('public'));
+
+app.use(passport.initialize());
+
+let authMiddleware = require('./auth')(passport); // Pass Passport instance to auth.js
+
+app.use('/api/auth', authMiddleware); // Use authentication routes from auth.js
 
 
 app.get('/', (req, res) => {
     res.send('Welcome to my Movie API! Here you can find a list of my top 10 movies.');
 });
 
-let auth = require('./auth')(app);
+
 
 // CREATE
 
@@ -202,7 +206,6 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+  console.log(`Server is running on port ${PORT}`);
 });
-
 
