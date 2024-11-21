@@ -121,24 +121,7 @@ app.get('/movies/:id', async (req, res) => {
   }
 });
 
-  
-app.get('/movies', (req, res) => {
-    res.json({
-        movies: [
-            "Top Gun",
-            "The Little Mermaid",
-            "Barbie (2024)",
-            "Twisters",
-            "The Notebook",
-            "Titanic",
-            "Pretty Woman",
-            "How to Lose a Guy in 10 Days",
-            "Pretty in Pink",
-            "Anyone But You",
-            "The Wedding Planner"
-        ]
-    });
-});
+
 
 //UPDATE
 app.put('/users/:Username', async (req, res) => {
