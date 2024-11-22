@@ -15,10 +15,7 @@ const users = [
 
 const SECRET_KEY = process.env.JWT_SECRET || 'your_jwt_secret';
 
-const jwt = require('jsonwebtoken'),
-  passport = require('passport');
 
-require('./passport');
 
 /**
  * Generate a JWT token for a user
