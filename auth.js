@@ -15,6 +15,11 @@ const users = [
 
 const SECRET_KEY = process.env.JWT_SECRET || 'your_jwt_secret';
 
+const jwt = require('jsonwebtoken'),
+  passport = require('passport');
+
+require('./passport');
+
 /**
  * Generate a JWT token for a user
  * @param {Object} user - The user object
@@ -31,25 +36,36 @@ const generateJWTToken = (user, expiresIn = '1h') => {
 
 
 
+
 // Initialize Passport middleware
 router.use(passport.initialize());
 
-// Login endpoint
-router.post('/login', (req, res, next) => {
-  passport.authenticate('local', { session: false }, (err, user, info) => {
-    if (err) return next(err);
-    if (!user) {
-      return res.status(401).json({ message: info.message || 'Login failed' });
-    }
-    // Generate JWT token
-    const token = generateJWTToken(user);
-    return res.json({ message: 'Login successful', token });
-  })(req, res, next);
-});
-
-// Protected route (requires JWT token)
-router.get('/profile', passport.authenticate('jwt', { session: false }), (req, res) => {
-    res.json({ message: 'Welcome to your profile', user: req.user });
+/**
+ * Express route handler for user login.
+ * @name loginUser
+ * @function
+ * @memberof module:Auth
+ * @param {Object} req - Express request object.
+ * @param {Object} res - Express response object.
+ */
+module.exports = (router) => {
+  router.post('/login', (req, res) => {
+    passport.authenticate('local', { session: false }, (error, user, info) => {
+      if (error || !user) {
+        return res.status(400).json({
+          message: 'Something is not right',
+          user: user,
+        });
+      }
+      req.login(user, { session: false }, (error) => {
+        if (error) {
+          res.send(error);
+        }
+        let token = generateJWTToken(user.toJSON());
+        return res.json({ user, token });
+      });
+    })(req, res);
   });
+};
 
 module.exports = router;

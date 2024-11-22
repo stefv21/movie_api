@@ -2,12 +2,12 @@ const passport = require('passport'),
       LocalStrategy = require('passport-local').Strategy,
       Models = require('./models.js'),
       passportJWT = require('passport-jwt');
-      Users = Models.User,
+
+    let Users = Models.User,
       JWTStrategy = passportJWT.Strategy,
       ExtractJWT = passportJWT.ExtractJwt;
 
-const jwtSecret = 'your_jwt_secret'; 
-
+const SECRET_KEY = process.env.JWT_SECRET || 'your_jwt_secret';
 
 passport.use(
   new LocalStrategy(
@@ -33,27 +33,29 @@ passport.use(
           console.log(error);
           return callback(error);
         }
-      })
-    }
-  )
+      });
+    },
+  ),
 );
 
 
 passport.use(
   new JWTStrategy(
     {
-  jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
-  secretOrKey: 'your_jwt_secret'
-}, 
-async (jwtPayload, callback) => {
-  return await Users.findById(jwtPayload._id)
-    .then((user) => {
-      return callback(null, user);
-    })
-    .catch((error) => {
-      return callback(error)
-    });
-}));
+      jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
+      secretOrKey: SECRET_KEY,
+    },
+    async (jwtPayload, callback) => {
+      return await Users.findById(jwtPayload._id)
+        .then((user) => {
+          return callback(null, user);
+        })
+        .catch((error) => {
+          return callback(error);
+        });
+    },
+  ),
+);
 
 
 /* POST login. */
