@@ -7,7 +7,7 @@ const Users = Models.User;
 
 const express = require('express');
 const morgan = require('morgan'); 
-const passport = require('passport');
+
 const app = express();
 const PORT = 8080;
 
@@ -20,11 +20,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
 app.use(express.static('public'));
 
-app.use(passport.initialize());
 
-let authMiddleware = require('./auth')(passport); // Pass Passport instance to auth.js
 
-app.use('/api/auth', authMiddleware); // Use authentication routes from auth.js
+require('./auth')(app);
 
 
 app.get('/', (req, res) => {

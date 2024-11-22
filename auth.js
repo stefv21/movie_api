@@ -9,38 +9,27 @@ const router = express.Router();
 
 
 const users = [
-  { id: 1, username: 'testuser', password: 'password123' }, // Example user
+  { id: 1, username: 'testuser', password: 'password123' }, 
 ];
 
 
-passport.use(
-  new LocalStrategy((username, password, done) => {
-    const user = users.find((u) => u.username === username);
-    if (!user) {
-      return done(null, false, { message: 'Invalid username' });
-    }
-    if (user.password !== password) {
-      return done(null, false, { message: 'Invalid password' });
-    }
-    return done(null, user);
-  })
-);
+const SECRET_KEY = process.env.JWT_SECRET || 'your_jwt_secret';
 
-passport.use(
-    new JwtStrategy(
-      {
-        jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-        secretOrKey: 'your_jwt_secret',
-      },
-      (jwtPayload, done) => {
-        const user = users.find((u) => u.id === jwtPayload.id);
-        if (!user) {
-          return done(null, false, { message: 'User not found' });
-        }
-        return done(null, user);
-      }
-    )
-  );
+/**
+ * Generate a JWT token for a user
+ * @param {Object} user - The user object
+ * @param {string} expiresIn - Token expiration time (default is '1h')
+ * @returns {string} - Signed JWT token
+ */
+const generateJWTToken = (user, expiresIn = '1h') => {
+  const payload = {
+    id: user.id,
+    username: user.username,
+  };
+  return jwt.sign(payload, SECRET_KEY, { expiresIn });
+};
+
+
 
 // Initialize Passport middleware
 router.use(passport.initialize());
@@ -53,7 +42,7 @@ router.post('/login', (req, res, next) => {
       return res.status(401).json({ message: info.message || 'Login failed' });
     }
     // Generate JWT token
-    const token = jwt.sign({ id: user.id, username: user.username }, 'your_jwt_secret', { expiresIn: '1h' });
+    const token = generateJWTToken(user);
     return res.json({ message: 'Login successful', token });
   })(req, res, next);
 });
