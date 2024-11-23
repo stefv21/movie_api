@@ -2,6 +2,7 @@ const express = require('express');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const jwt = require('jsonwebtoken');
+      require ('./passport');
 const JwtStrategy = require('passport-jwt').Strategy;
 const ExtractJwt = require('passport-jwt').ExtractJwt;
 
@@ -32,11 +33,6 @@ const generateJWTToken = (user, expiresIn = '1h') => {
 };
 
 
-
-
-// Initialize Passport middleware
-router.use(passport.initialize());
-
 /**
  * Express route handler for user login.
  * @name loginUser
@@ -65,4 +61,4 @@ module.exports = (router) => {
   });
 };
 
-module.exports = router;
+
