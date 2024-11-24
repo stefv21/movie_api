@@ -10,6 +10,7 @@ const express = require('express');
 const morgan = require('morgan'); 
 const cors = require('cors');
 const app = express();
+const { check, validationResult } = require('express-validator');
 
 
 app.use(cors());
@@ -25,7 +26,7 @@ const { check, validationResult } = require('express-validator');
 
 //mongoose.connect('mongodb://localhost:27017/db', { useNewUrlParser: true, useUnifiedTopology: true });
 
-mongoose.connect( process.env.CONNECTION_URI, { 
+mongoose.connect(process.env.CONNECTION_URI, { 
   useNewUrlParser: true, 
   useUnifiedTopology: true
 
@@ -55,7 +56,20 @@ app.get('/', (req, res) => {
     res.send('Welcome to my Movie API! Here you can find a list of my top 10 movies.');
 });
 
+// Create: Register a new user with validation
 
+app.post('/users', [
+  check('Username', 'Username is required').not().isEmpty(),
+  check('Email', 'Email is not valid').isEmail(),
+  check('Password', 'Password must be at least 6 characters long').isLength({ min: 6 }),
+  check('Birthday', 'Birthday must be a valid date').optional().isDate()
+], async (req, res) => {
+  // Validate the request data
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+});
 
 // CREATE
 
