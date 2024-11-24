@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const CONNECTION_URI = process.env.CONNECTION_URI;
 require('dotenv').config();
 const Models = require('./models.js');
 
