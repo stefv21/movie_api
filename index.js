@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+require('dotenv').config();
 const Models = require('./models.js');
 
 const Movies = Models.Movie;
@@ -7,28 +8,44 @@ const Users = Models.User;
 
 const express = require('express');
 const morgan = require('morgan'); 
-
+const cors = require('cors');
 const app = express();
-const PORT = 8080;
+
+
+app.use(cors());
+
+// Your routes go here
+app.get('/example', (req, res) => {
+    res.send('CORS is enabled for all domains!');
+});
+
+
 
 const { check, validationResult } = require('express-validator');
 
 //mongoose.connect('mongodb://localhost:27017/db', { useNewUrlParser: true, useUnifiedTopology: true });
 
-mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect( process.env.CONNECTION_URI, { 
+  useNewUrlParser: true, 
+  useUnifiedTopology: true
+
+})
+
+.then(() => {
+  console.log('Database connected');
+}).catch((err) => {
+  console.error('Database connection error:', err);
+});
+
 
 //to debug
 console.log('Connection URI:', process.env.CONNECTION_URI);
 
-
+//middleware
 app.use(express.json()); 
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
 app.use(express.static('public'));
-
-const cors = require('cors');
-app.use(cors());
-
 
 
 require('./auth')(app);
@@ -78,6 +95,29 @@ app.post('/movies', async (req, res) => {
   } catch (error) {
       console.error(error);
       res.status(500).send('Error: ' + error);
+  }
+});
+
+// POST User login
+app.post('/login', async (req, res) => {
+  const { Username, Password } = req.body;
+  
+  try {
+    const user = await Users.findOne({ Username });
+    if (!user) {
+      return res.status(400).send('User not found');
+    }
+
+    // Compare submitted password with the stored hashed password
+    const isMatch = await user.comparePassword(Password);
+    if (!isMatch) {
+      return res.status(400).send('Invalid password');
+    }
+
+    res.status(200).send('Login successful');
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error: ' + err);
   }
 });
 

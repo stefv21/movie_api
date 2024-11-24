@@ -1,31 +1,71 @@
 const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
+
 
 let movieSchema = mongoose.Schema({
-    Title: {type: String, required: true},
-    Description: {type: String, required: true},
-    Genre: {
-      Name: String,
-      Description: String
-    },
-    Director: {
-      Name: String,
-      Bio: String
-    },
-    Actors: [String],
-    ImagePath: String,
-    Featured: Boolean
-  });
+  Title: {type: String, required: true},
+  Description: {type: String, required: true},
+  Genre: {
+    Name: String,
+    Description: String
+  },
+  Director: {
+    Name: String,
+    Bio: String
+  },
+  Actors: [String],
+  ImagePath: String,
+  Featured: Boolean
+});
+
+
+
+
+
+let userSchema = mongoose.Schema({
+  Username: {type: String, required: true},
+  Password: {type: String, required: true},
+  Email: {type: String, required: true},
+  Birthday: Date,
+  FavoriteMovies: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Movie' }]
+});
+
+// Hash password before saving
+userSchema.pre('save', async function(next) {
+  if (!this.isModified('Password')) return next(); // Only hash if password is new or modified
+
+  try {
+    const salt = await bcrypt.genSalt(10); // Create a salt
+    this.Password = await bcrypt.hash(this.Password, salt); // Hash password
+    next();
+  } catch (err) {
+    next(err);
+  }
+});
+
+// Compare password during login
+userSchema.methods.comparePassword = async function(candidatePassword) {
+  try {
+    const isMatch = await bcrypt.compare(candidatePassword, this.Password);
+    return isMatch;
+  } catch (err) {
+    throw err;
+  }
+};
+
+
+
+
+
+let Movie = mongoose.model('Movie', movieSchema);
+let User = mongoose.model('User', userSchema);
+
+module.exports.Movie = Movie;
+module.exports.User = User;
+
+
+
+
+
   
-  let userSchema = mongoose.Schema({
-    Username: {type: String, required: true},
-    Password: {type: String, required: true},
-    Email: {type: String, required: true},
-    Birthday: Date,
-    FavoriteMovies: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Movie' }]
-  });
   
-  let Movie = mongoose.model('Movie', movieSchema);
-  let User = mongoose.model('User', userSchema);
-  
-  module.exports.Movie = Movie;
-  module.exports.User = User;
