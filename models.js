@@ -3,19 +3,14 @@ const bcrypt = require('bcryptjs');
 
 
 let movieSchema = mongoose.Schema({
-  Title: {type: String, required: true},
-  Description: {type: String, required: true},
-  Genre: {
-    Name: String,
-    Description: String
-  },
-  Director: {
-    Name: String,
-    Bio: String
-  },
-  Actors: [String],
-  ImagePath: String,
-  Featured: Boolean
+  title: {type: String, required: true},
+  description: {type: String, required: true},
+  genre: String,
+    
+  director: String,
+ 
+  imageURL: String,
+  featured: Boolean
 });
 
 
@@ -52,8 +47,6 @@ userSchema.methods.comparePassword = async function(candidatePassword) {
     throw err;
   }
 };
-
-
 
 
 
