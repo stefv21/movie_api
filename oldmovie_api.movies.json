@@ -1,0 +1,115 @@
+[{
+  "_id": {
+    "$oid": "673692fe9dcab5860a865988"
+  },
+  "title": "Top Gun",
+  "description": "A modern action movie about elite naval aviators.",
+  "director": "Tony Scott",
+  "genre": "Action",
+  "imageURL": "http://example.com/topgun.jpg",
+  "featured": true
+},
+{
+  "_id": {
+    "$oid": "673692fe9dcab5860a865989"
+  },
+  "title": "The Little Mermaid",
+  "description": "A Disney animated classic about a young mermaid's adventures.",
+  "director": "Ron Clements",
+  "genre": "Fantasy",
+  "imageURL": "http://example.com/littlemermaid.jpg",
+  "featured": false,
+  "directorBio": "A veteran animator and filmmaker known for iconic Disney classics."
+},
+{
+  "_id": {
+    "$oid": "673692fe9dcab5860a86598a"
+  },
+  "title": "Barbie (2024)",
+  "description": "A live-action adaptation that explores Barbie's world and adventures.",
+  "director": "Greta Gerwig",
+  "genre": "Fantasy",
+  "imageURL": "http://example.com/barbie2024.jpg",
+  "featured": true
+},
+{
+  "_id": {
+    "$oid": "673692fe9dcab5860a86598b"
+  },
+  "title": "Twisters",
+  "description": "A thrilling movie about storm chasers facing nature's wrath.",
+  "director": "Jan de Bont",
+  "genre": "Action",
+  "imageURL": "http://example.com/twisters.jpg",
+  "featured": true
+},
+{
+  "_id": {
+    "$oid": "673692fe9dcab5860a86598c"
+  },
+  "title": "The Notebook",
+  "description": "A romantic drama about a love story that transcends time.",
+  "director": "Nick Cassavetes",
+  "genre": "Romance",
+  "imageURL": "http://example.com/notebook.jpg",
+  "featured": true
+},
+{
+  "_id": {
+    "$oid": "673692fe9dcab5860a86598d"
+  },
+  "title": "Titanic",
+  "description": "A historical romance set against the tragic sinking of the Titanic.",
+  "director": "James Cameron",
+  "genre": "Romance",
+  "imageURL": "http://example.com/titanic.jpg",
+  "featured": true
+},
+{
+  "_id": {
+    "$oid": "673692fe9dcab5860a86598e"
+  },
+  "title": "Pretty Woman",
+  "description": "A romantic comedy about a chance encounter that changes two lives.",
+  "director": "Garry Marshall",
+  "genre": "Romance",
+  "imageURL": "http://example.com/prettywoman.jpg",
+  "featured": false
+},
+{
+  "_id": {
+    "$oid": "673692fe9dcab5860a86598f"
+  },
+  "title": "How to Lose a Guy in 10 Days",
+  "description": "A humorous tale about a woman writing an article on dating gone wrong.",
+  "director": "Donald Petrie",
+  "genre": "Romance",
+  "imageURL": "http://example.com/lovehowto.jpg",
+  "featured": false
+},
+{
+  "_id": {
+    "$oid": "673692fe9dcab5860a865990"
+  },
+  "title": "Aladdin",
+  "description": "A young man discovers a magical lamp and embarks on an adventure to win the heart of Princess Jasmine.",
+  "director": "Ron Clements",
+  "genre": "Fantasy",
+  "imageURL": "http://example.com/aladdin.jpg",
+  "featured": true,
+  "directorBio": "A veteran animator and filmmaker known for iconic Disney classics."
+},
+{
+  "_id": {
+    "$oid": "673692fe9dcab5860a865991"
+  },
+  "title": "The Wedding Planner",
+  "description": "A romantic comedy about a wedding planner who finds herself falling for the groom.",
+  "director": "Adam Shankman",
+  "genre": "Romance",
+  "imageURL": "http://example.com/weddingplanner.jpg",
+  "featured": true
+}]
+
+
+mongoimport --uri mongodb+srv://svargas1121:RO102VUIiU0Qs9a7@mymovieapi.tx01r.mongodb.net/MyMovieApi --collection movies --type json --file movie_api.movies.json

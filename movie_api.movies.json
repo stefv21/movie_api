@@ -1,112 +1,113 @@
 [{
   "_id": {
-    "$oid": "673692fe9dcab5860a865988"
+    "$oid": "675af8aa8f311542b0f04378"
+  },
+  "title": "The Matrix",
+  "director": "Wachowski Brothers",
+  "genre": "Sci-Fi",
+  "year": 1999,
+  "rating": 8.7
+},
+{
+  "_id": {
+    "$oid": "675afb4e8f311542b0f04379"
+  },
+  "Title": "Silence of the Lambs",
+  "Description": "A young FBI cadet must receive the help of an incarcerated and manipulative cannibal killer to help catch another serial killer.",
+  "Genre": {
+    "Name": "Thriller",
+    "Description": "Thriller film, also known as suspense film or suspense thriller, is a broad film genre that involves excitement and suspense in the audience."
+  },
+  "Director": {
+    "Name": "Jonathan Demme",
+    "Bio": "Robert Jonathan Demme was an American director, producer, and screenwriter.",
+    "Birth": "1944",
+    "Death": "2017"
+  },
+  "ImagePath": "silenceofthelambs.png",
+  "Featured": true
+},
+{
+  "_id": {
+    "$oid": "675b07578f311542b0f0437a"
   },
   "title": "Top Gun",
   "description": "A modern action movie about elite naval aviators.",
-  "director": "Tony Scott",
-  "genre": "Action",
+  "director": {
+    "name": "Tony Scott",
+    "bio": "Tony Scott was a British film director, producer, and screenwriter, known for his action films.",
+    "birthyear": "1944-06-21",
+    "deathyear": "2012-08-19"
+  },
+  "genre": {
+    "name": "Action",
+    "description": "Fast-paced movies with intense sequences of physical action."
+  },
   "imageURL": "http://example.com/topgun.jpg",
-  "featured": true
+  "featured": true,
+  "releaseYear": 1986,
+  "runtime": 110
 },
 {
   "_id": {
-    "$oid": "673692fe9dcab5860a865989"
+    "$oid": "675b07578f311542b0f0437b"
   },
   "title": "The Little Mermaid",
   "description": "A Disney animated classic about a young mermaid's adventures.",
-  "director": "Ron Clements",
-  "genre": "Fantasy",
+  "director": {
+    "name": "Ron Clements",
+    "bio": "Ron Clements is an American animator, film director, and screenwriter known for his work on Disney classics.",
+    "birthyear": "1953-04-25",
+    "deathyear": null
+  },
+  "genre": {
+    "name": "Fantasy",
+    "description": "Movies involving magical or supernatural elements."
+  },
   "imageURL": "http://example.com/littlemermaid.jpg",
   "featured": false,
-  "directorBio": "A veteran animator and filmmaker known for iconic Disney classics."
+  "releaseYear": 1989,
+  "runtime": 83
 },
 {
   "_id": {
-    "$oid": "673692fe9dcab5860a86598a"
-  },
-  "title": "Barbie (2024)",
-  "description": "A live-action adaptation that explores Barbie's world and adventures.",
-  "director": "Greta Gerwig",
-  "genre": "Fantasy",
-  "imageURL": "http://example.com/barbie2024.jpg",
-  "featured": true
-},
-{
-  "_id": {
-    "$oid": "673692fe9dcab5860a86598b"
-  },
-  "title": "Twisters",
-  "description": "A thrilling movie about storm chasers facing nature's wrath.",
-  "director": "Jan de Bont",
-  "genre": "Action",
-  "imageURL": "http://example.com/twisters.jpg",
-  "featured": true
-},
-{
-  "_id": {
-    "$oid": "673692fe9dcab5860a86598c"
-  },
-  "title": "The Notebook",
-  "description": "A romantic drama about a love story that transcends time.",
-  "director": "Nick Cassavetes",
-  "genre": "Romance",
-  "imageURL": "http://example.com/notebook.jpg",
-  "featured": true
-},
-{
-  "_id": {
-    "$oid": "673692fe9dcab5860a86598d"
-  },
-  "title": "Titanic",
-  "description": "A historical romance set against the tragic sinking of the Titanic.",
-  "director": "James Cameron",
-  "genre": "Romance",
-  "imageURL": "http://example.com/titanic.jpg",
-  "featured": true
-},
-{
-  "_id": {
-    "$oid": "673692fe9dcab5860a86598e"
-  },
-  "title": "Pretty Woman",
-  "description": "A romantic comedy about a chance encounter that changes two lives.",
-  "director": "Garry Marshall",
-  "genre": "Romance",
-  "imageURL": "http://example.com/prettywoman.jpg",
-  "featured": false
-},
-{
-  "_id": {
-    "$oid": "673692fe9dcab5860a86598f"
-  },
-  "title": "How to Lose a Guy in 10 Days",
-  "description": "A humorous tale about a woman writing an article on dating gone wrong.",
-  "director": "Donald Petrie",
-  "genre": "Romance",
-  "imageURL": "http://example.com/lovehowto.jpg",
-  "featured": false
-},
-{
-  "_id": {
-    "$oid": "673692fe9dcab5860a865990"
+    "$oid": "675b08c68f311542b0f0437c"
   },
   "title": "Aladdin",
   "description": "A young man discovers a magical lamp and embarks on an adventure to win the heart of Princess Jasmine.",
-  "director": "Ron Clements",
-  "genre": "Fantasy",
+  "director": {
+    "name": "Ron Clements",
+    "bio": "Ron Clements is an American animator, film director, and screenwriter known for his work on Disney classics.",
+    "birthyear": "1953-04-25",
+    "deathyear": null
+  },
+  "genre": {
+    "name": "Fantasy",
+    "description": "Movies involving magical or supernatural elements."
+  },
   "imageURL": "http://example.com/aladdin.jpg",
   "featured": true,
-  "directorBio": "A veteran animator and filmmaker known for iconic Disney classics."
+  "releaseYear": 1992,
+  "runtime": 90
 },
 {
   "_id": {
-    "$oid": "673692fe9dcab5860a865991"
+    "$oid": "675b08c68f311542b0f0437d"
   },
   "title": "The Wedding Planner",
   "description": "A romantic comedy about a wedding planner who finds herself falling for the groom.",
-  "director": "Adam Shankman",
-  "genre": "Romance",
+  "director": {
+    "name": "Adam Shankman",
+    "bio": "Adam Shankman is an American film director, producer, and choreographer known for romantic comedies and musicals.",
+    "birthyear": "1964-11-27",
+    "deathyear": null
+  },
+  "genre": {
+    "name": "Romance",
+    "description": "Movies centered around love and romantic relationships."
+  },
   "imageURL": "http://example.com/weddingplanner.jpg",
-  "featured": true
+  "featured": true,
+  "releaseYear": 2001,
+  "runtime": 104
 }]

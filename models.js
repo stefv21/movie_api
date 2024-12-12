@@ -2,18 +2,18 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
 
-let movieSchema = mongoose.Schema({
+let movieSchema = mongoose.Schema ({
   title: {type: String, required: true},
   description: {type: String, required: true},
-  genre: String,
-    
-  director: String,
- 
-  imageURL: String,
-  featured: Boolean
+  genre: {
+      name: String,
+      description: String
+  },
+  director: {
+      name: String,
+      bio: String
+  }
 });
-
-
 
 
 
@@ -25,27 +25,13 @@ let userSchema = mongoose.Schema({
   favoriteMovies: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Movie' }]
 });
 
-// Hash password before saving
-userSchema.pre('save', async function(next) {
-  if (!this.isModified('password')) return next(); // Only hash if password is new or modified
 
-  try {
-    const salt = await bcrypt.genSalt(10); // Create a salt
-    this.password = await bcrypt.hash(this.password, salt); // Hash password
-    next();
-  } catch (err) {
-    next(err);
-  }
-});
+userSchema.statics.hashPassword = (password) => {
+  return bcrypt.hashSync(password, 10);
+};
 
-// Compare password during login
-userSchema.methods.comparePassword = async function(candidatePassword) {
-  try {
-    const isMatch = await bcrypt.compare(candidatePassword, this.password);
-    return isMatch;
-  } catch (err) {
-    throw err;
-  }
+userSchema.methods.validatePassword = function(password) {
+  return bcrypt.compareSync(password, this.password);
 };
 
 

@@ -1,0 +1,55 @@
+[{
+  "_id": {
+    "$oid": "675b09e88f311542b0f0437e"
+  },
+  "name": "John Doe",
+  "email": "john.doe@example.com",
+  "birthday": {
+    "$date": "1985-02-19T00:00:00.000Z"
+  },
+  "address": "123 Main St, Springfield, IL"
+},
+{
+  "_id": {
+    "$oid": "675b09e88f311542b0f0437f"
+  },
+  "name": "Jane Smith",
+  "email": "jane.smith@example.com",
+  "birthday": {
+    "$date": "1990-07-15T00:00:00.000Z"
+  },
+  "address": "456 Oak Ave, Springfield, IL"
+},
+{
+  "_id": {
+    "$oid": "675b09e88f311542b0f04380"
+  },
+  "name": "Alice Johnson",
+  "email": "alice.johnson@example.com",
+  "birthday": {
+    "$date": "1992-11-30T00:00:00.000Z"
+  },
+  "address": "789 Pine Rd, Springfield, IL"
+},
+{
+  "_id": {
+    "$oid": "675b09e88f311542b0f04381"
+  },
+  "name": "Bob Brown",
+  "email": "bob.brown@example.com",
+  "birthday": {
+    "$date": "1988-05-23T00:00:00.000Z"
+  },
+  "address": "321 Maple Dr, Springfield, IL"
+},
+{
+  "_id": {
+    "$oid": "675b09e88f311542b0f04382"
+  },
+  "name": "Charlie Davis",
+  "email": "charlie.davis@example.com",
+  "birthday": {
+    "$date": "1995-01-10T00:00:00.000Z"
+  },
+  "address": "654 Elm St, Springfield, IL"
+}]

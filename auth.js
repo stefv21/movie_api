@@ -3,18 +3,21 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const jwt = require('jsonwebtoken');
       require ('./passport');
+      
 const JwtStrategy = require('passport-jwt').Strategy;
 const ExtractJwt = require('passport-jwt').ExtractJwt;
 
 const router = express.Router();
 
 
-const users = [
-  { id: 1, username: 'testuser', password: 'password123' }, 
-];
+
 
 
 const SECRET_KEY = process.env.JWT_SECRET || 'your_jwt_secret';
+
+
+
+
 
 
 
