@@ -12,6 +12,7 @@ const cors = require('cors');
 const app = express();
 const { check, validationResult } = require('express-validator');
 
+require('./auth')(app);
 
 app.use(cors());
 
@@ -42,7 +43,7 @@ app.use(morgan('dev'));
 app.use(express.static('public'));
 
 
-require('./auth')(app);
+
 
 
 app.get('/', (req, res) => {
