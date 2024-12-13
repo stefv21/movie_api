@@ -66,7 +66,7 @@ app.post('/users', [
 
 // CREATE
 
-app.post('/users', async (req, res) => {
+
   app.post('/users', async (req, res) => {
     let hashedPassword = Users.hashPassword(req.body.Password);
 
@@ -90,11 +90,13 @@ app.post('/users', async (req, res) => {
           })
         }
       })
+
       .catch((error) => {
         console.error(error);
         res.status(500).send('Error: ' + error);
       });
   });
+   
 
 
   // Create: Add a new movie
@@ -263,10 +265,9 @@ app.use((err, req, res, next) => {
     res.status(500).send('Something went wrong!'); 
 });
 
+
+
 const port = process.env.PORT || 8080;
-app.listen(port, '0.0.0.0',() => {
+app.listen(port,() => {
  console.log('Listening on Port ' + port);
 });
-
-
-
