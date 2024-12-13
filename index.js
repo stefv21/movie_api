@@ -20,25 +20,20 @@ app.get('/example', (req, res) => {
     res.send('CORS is enabled for all domains!');
 });
 
-
-
-//mongoose.connect('mongodb://localhost:27017/db', { useNewUrlParser: true, useUnifiedTopology: true });
-
 mongoose.connect(process.env.CONNECTION_URI, { 
   useNewUrlParser: true, 
   useUnifiedTopology: true
-
 })
-
 .then(() => {
   console.log('Database connected');
-}).catch((err) => {
+})
+.catch((err) => {
   console.error('Database connection error:', err);
 });
 
 
-//to debug
-console.log('Connection URI:', process.env.CONNECTION_URI);
+
+
 
 //middleware
 app.use(express.json()); 
@@ -264,8 +259,11 @@ app.use((err, req, res, next) => {
     res.status(500).send('Something went wrong!'); 
 });
 
-const port = process.env.PORT || 8080;
-app.listen(port, '0.0.0.0',() => {
- console.log('Listening on Port ' + port);
+const port = process.env.PORT || 3000;
+
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
 });
+
+
 
