@@ -1,0 +1,42 @@
+[
+  {
+    "name": "John Doe",
+    "email": "john.doe@example.com",
+    "birthday": {
+      "$date": "1985-02-19T00:00:00Z"
+    },
+    "address": "123 Main St, Springfield, IL"
+  },
+  {
+    "name": "Jane Smith",
+    "email": "jane.smith@example.com",
+    "birthday": {
+      "$date": "1990-07-15T00:00:00Z"
+    },
+    "address": "456 Oak Ave, Springfield, IL"
+  },
+  {
+    "name": "Alice Johnson",
+    "email": "alice.johnson@example.com",
+    "birthday": {
+      "$date": "1992-11-30T00:00:00Z"
+    },
+    "address": "789 Pine Rd, Springfield, IL"
+  },
+  {
+    "name": "Bob Brown",
+    "email": "bob.brown@example.com",
+    "birthday": {
+      "$date": "1988-05-23T00:00:00Z"
+    },
+    "address": "321 Maple Dr, Springfield, IL"
+  },
+  {
+    "name": "Charlie Davis",
+    "email": "charlie.davis@example.com",
+    "birthday": {
+      "$date": "1995-01-10T00:00:00Z"
+    },
+    "address": "654 Elm St, Springfield, IL"
+  }
+]
