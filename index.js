@@ -58,7 +58,7 @@ app.post('/users', [
   check('Password', 'Password must be at least 6 characters long').isLength({ min: 6 }),
   check('Birthday', 'Birthday must be a valid date').optional().isDate()
 ], async (req, res) => {
-  // Validate the request data
+ 
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
@@ -68,8 +68,12 @@ app.post('/users', [
 // CREATE
 
 app.post('/users', async (req, res) => {
+  app.post('/users', async (req, res) => {
+    let hashedPassword = Users.hashPassword(req.body.Password);
+
     await Users.findOne({ Username: req.body.Username })
-      .then((user) => {
+      
+    .then((user) => {
         if (user) {
           return res.status(400).send(req.body.Username + 'already exists');
         } else {
