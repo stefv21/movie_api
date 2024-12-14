@@ -21,6 +21,11 @@ app.get('/example', (req, res) => {
     res.send('CORS is enabled for all domains!');
 });
 
+mongoose.connect('mongodb+srv://svargas1121:make120k@mymovieapi.tx01r.mongodb.net/?retryWrites=true&w=majority&appName=MyMovieApi', 
+{ useNewUrlParser: true, 
+  useUnifiedTopology: true 
+});
+
 
 mongoose.connect(process.env.CONNECTION_URI, { 
   useNewUrlParser: true, 
