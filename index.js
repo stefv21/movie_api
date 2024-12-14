@@ -21,10 +21,6 @@ app.get('/example', (req, res) => {
     res.send('CORS is enabled for all domains!');
 });
 
-mongoose.connect('mongodb+srv://svargas1121:make120k@mymovieapi.tx01r.mongodb.net/?retryWrites=true&w=majority&appName=MyMovieApi', 
-{ useNewUrlParser: true, 
-  useUnifiedTopology: true 
-});
 
 
 mongoose.connect(process.env.CONNECTION_URI, { 
@@ -170,9 +166,10 @@ app.get('/users/:Username', async (req, res) => {
 app.get('/movies', async (req, res) => {
   try {
       const movies = await Movies.find();
-      console.log(movies);
-      console.log('request',req);
-      console.log('response',res);
+      console.log('movies', movies);
+      console.log('Movies', Movies);
+
+      
 
       res.status(200).json(movies);
   } catch (err) {
