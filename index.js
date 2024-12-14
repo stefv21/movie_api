@@ -85,21 +85,30 @@ app.post('/users', [
 });
 
 app.post('/movies', async (req, res) => {
-  const { Title, Genre, Description, Director, ImagePath, Featured, ReleaseYear, Runtime } = req.body;
+  const { 
+    Title, 
+    Genre, 
+    Description, 
+    Director, 
+    ImagePath, 
+    Featured, 
+    ReleaseYear, 
+    Runtime 
+  } = req.body;
 
   try {
     const newMovie = await Movies.create({
       Title,
       Genre: {
-        Name: Genre.name,
-        Description: Genre.description
+        Name: Genre.Name,             // Changed to match how it is in the request body
+        Description: Genre.Description // Changed to match how it is in the request body
       },
       Description,
       Director: {
-        Name: Director.name,
-        Bio: Director.bio,
-        Birth: Director.birthyear,
-        Death: Director.deathyear
+        Name: Director.Name,          
+        Bio: Director.Bio,            
+        Birth: Director.Birth,       
+        Death: Director.Death        
       },
       ImagePath,
       Featured,
@@ -113,6 +122,7 @@ app.post('/movies', async (req, res) => {
     res.status(500).send('Error: ' + error);
   }
 });
+
 
 
 
