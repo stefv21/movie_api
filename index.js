@@ -45,61 +45,46 @@ app.use(morgan('dev'));
 app.use(express.static('public'));
 
 
-
-
-
 app.get('/', (req, res) => {
     res.send('Welcome to my Movie API! Here you can find a list of my top 10 movies.');
 });
 
-// Create: Register a new user with validation
-
+//
 app.post('/users', [
   check('Username', 'Username is required').not().isEmpty(),
   check('Email', 'Email is not valid').isEmail(),
   check('Password', 'Password must be at least 6 characters long').isLength({ min: 6 }),
   check('Birthday', 'Birthday must be a valid date').optional().isDate()
 ], async (req, res) => {
- 
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
   }
+
+  let hashedPassword = Users.hashPassword(req.body.Password);
+
+  try {
+    const existingUser = await Users.findOne({ Username: req.body.Username });
+    if (existingUser) {
+      return res.status(400).json({ message: `${req.body.Username} already exists`, status: 'error' });
+    }
+
+    const user = await Users.create({
+      Username: req.body.Username,
+      Password: hashedPassword,
+      Email: req.body.Email,
+      Birthday: req.body.Birthday
+    });
+
+    res.status(201).json(user);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error: ' + error);
+  }
 });
 
-// CREATE
 
 
-  app.post('/users', async (req, res) => {
-    let hashedPassword = Users.hashPassword(req.body.Password);
-
-    await Users.findOne({ Username: req.body.Username })
-      
-    .then((user) => {
-        if (user) {
-          return res.status(400).send(req.body.Username + 'already exists');
-        } else {
-          Users
-            .create({
-              Username: req.body.Username,
-              Password: req.body.Password,
-              Email: req.body.Email,
-              Birthday: req.body.Birthday
-            })
-            .then((user) =>{res.status(201).json(user) })
-          .catch((error) => {
-            console.error(error);
-            res.status(500).send('Error: ' + error);
-          })
-        }
-      })
-
-      .catch((error) => {
-        console.error(error);
-        res.status(500).send('Error: ' + error);
-      });
-  });
-   
 
 
   // Create: Add a new movie
