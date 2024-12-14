@@ -1,13 +1,4 @@
-[{
-  "_id": {
-    "$oid": "675af8aa8f311542b0f04378"
-  },
-  "title": "The Matrix",
-  "director": "Wachowski Brothers",
-  "genre": "Sci-Fi",
-  "year": 1999,
-  "rating": 8.7
-},
+
 {
   "_id": {
     "$oid": "675afb4e8f311542b0f04379"
