@@ -168,10 +168,11 @@ app.get('/movies', async (req, res) => {
       const movies = await Movies.find();
       console.log('movies', movies);
       console.log('Movies', Movies);
-
+   
       
+      console.log('CollectionName', Movies.collection.collectionName);
 
-      res.status(200).json(movies);
+      res.status(200).json(movies)
   } catch (err) {
       console.error(err);
       res.status(500).send('Error: ' + err);
