@@ -170,6 +170,10 @@ app.get('/users/:Username', async (req, res) => {
 app.get('/movies', async (req, res) => {
   try {
       const movies = await Movies.find();
+      console.log(movies);
+      console.log('request',req);
+      console.log('response',res);
+
       res.status(200).json(movies);
   } catch (err) {
       console.error(err);
