@@ -84,22 +84,42 @@ app.post('/users', [
   }
 });
 
-
-
-
-
-
-  // Create: Add a new movie
 app.post('/movies', async (req, res) => {
-  const { Title, Genre, Description } = req.body;
+  const { Title, Genre, Description, Director, ImagePath, Featured, ReleaseYear, Runtime } = req.body;
+
   try {
-      const newMovie = await Movies.create({ Title, Genre, Description });
-      res.status(201).json(newMovie);
+    const newMovie = await Movies.create({
+      Title,
+      Genre: {
+        Name: Genre.name,
+        Description: Genre.description
+      },
+      Description,
+      Director: {
+        Name: Director.name,
+        Bio: Director.bio,
+        Birth: Director.birthyear,
+        Death: Director.deathyear
+      },
+      ImagePath,
+      Featured,
+      ReleaseYear,
+      Runtime
+    });
+
+    res.status(201).json(newMovie);
   } catch (error) {
-      console.error(error);
-      res.status(500).send('Error: ' + error);
+    console.error(error);
+    res.status(500).send('Error: ' + error);
   }
 });
+
+
+
+
+
+
+ 
 
 // POST User login
 app.post('/login', async (req, res) => {

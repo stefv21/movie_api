@@ -2,24 +2,25 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
 
-let movieSchema = mongoose.Schema({
-  title: { type: String, required: true },
-  description: { type: String, required: true },
-  genre: {
-    name: { type: String, required: true },
-    description: { type: String, required: true }
+const movieSchema = mongoose.Schema({
+  Title: { type: String, required: true },
+  Description: { type: String, required: true },
+  Genre: {
+    Name: { type: String, required: true },
+    Description: { type: String, required: true }
   },
-  director: {
-    name: { type: String, required: true },
-    bio: { type: String, required: true },
-    birthyear: { type: Number },
-    deathyear: { type: Number } // Optional year as a number
+  Director: {
+    Name: { type: String, required: true },
+    Bio: { type: String, required: true },
+    Birth: { type: String },
+    Death: { type: String }
   },
-  imageURL: { type: String, default: '' }, // Optional with default empty string
-  featured: { type: Boolean, default: false }, // Optional with default value 'false'
-  releaseYear: { type: Number }, // Optional
-  runtime: { type: Number } // Optional
+  ImagePath: { type: String },
+  Featured: { type: Boolean },
+  ReleaseYear: { type: Number },
+  Runtime: { type: Number }
 });
+
 
 
 
