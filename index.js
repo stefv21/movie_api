@@ -51,37 +51,39 @@ app.get('/', (req, res) => {
 
 //
 app.post('/users', [
-  check('Username', 'Username is required').not().isEmpty(),
-  check('Email', 'Email is not valid').isEmail(),
-  check('Password', 'Password must be at least 6 characters long').isLength({ min: 6 }),
-  check('Birthday', 'Birthday must be a valid date').optional().isDate()
+  check('name', 'Name is required').not().isEmpty(),
+  check('email', 'Email is not valid').isEmail(),
+  check('password', 'Password must be at least 6 characters long').isLength({ min: 6 }),
+  check('birthday', 'Birthday must be a valid date').optional().isDate()
 ], async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
   }
 
-  let hashedPassword = Users.hashPassword(req.body.Password);
+  let hashedPassword = Users.hashPassword(req.body.password); // Corrected to match validation
 
   try {
-    const existingUser = await Users.findOne({ Username: req.body.Username });
+    const existingUser = await Users.findOne({ email: req.body.email }); // Corrected to use 'email'
     if (existingUser) {
-      return res.status(400).json({ message: `${req.body.Username} already exists`, status: 'error' });
+      return res.status(400).json({ message: `${req.body.email} already exists`, status: 'error' });
     }
 
     const user = await Users.create({
-      Username: req.body.Username,
-      Password: hashedPassword,
-      Email: req.body.Email,
-      Birthday: req.body.Birthday
+      name: req.body.name,  // Corrected to match schema field
+      password: hashedPassword,  // Corrected to match schema field
+      email: req.body.email,  // Corrected to match schema field
+      birthday: req.body.birthday,  // Corrected to match schema field
+      address: req.body.address  // If address is part of the request body
     });
 
-    res.status(201).json(user);
+    res.status(201).json({ message: 'User created successfully', status: 'success', user: user });
   } catch (error) {
     console.error(error);
-    res.status(500).send('Error: ' + error);
+    res.status(500).json({ message: 'Server error', status: 'error' });
   }
 });
+
 
 
 
