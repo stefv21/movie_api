@@ -11,8 +11,15 @@ let movieSchema = mongoose.Schema ({
   },
   director: {
       name: String,
-      bio: String
-  }
+      bio: String,
+      birthyear : String,
+      deathyear: String
+  }, 
+  imageURL: String,
+  featured: Boolean,
+  releaseYear: Number,
+  runtime: Number
+
 });
 
 
