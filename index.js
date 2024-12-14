@@ -33,7 +33,7 @@ app.get('/example', (req, res) => {
 mongoose.connect(process.env.CONNECTION_URI, { 
   useNewUrlParser: true, 
   useUnifiedTopology: true
-});
+})
 
 .then(() => {
   console.log('Database connected');
@@ -47,6 +47,7 @@ mongoose.connect(process.env.CONNECTION_URI, {
 //middleware
 app.use(express.json()); 
 app.use(express.urlencoded({ extended: true }));
+
 app.use(morgan('dev'));
 app.use(express.static('public'));
 
