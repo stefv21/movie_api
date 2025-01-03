@@ -5,41 +5,35 @@ const Models = require('./models.js');
 const Movies = Models.Movie;
 const Users = Models.User;
 
-
 const express = require('express');
 const morgan = require('morgan'); 
 const cors = require('cors');
 const app = express();
 const { check, validationResult } = require('express-validator');
 
+// Middleware
+app.use(cors());
+app.use(express.json()); 
+app.use(express.urlencoded({ extended: true }));
+app.use(morgan('dev'));
+app.use(express.static('public'));
 
+// Test route
 app.get('/test', (req, res) => {
   res.json({ message: 'Test endpoint working' });
 });
 
-
-
-
-app.use(cors());
-
-//middleware
-app.use(express.json()); 
-app.use(express.urlencoded({ extended: true }));
-
-app.use(morgan('dev'));
-app.use(express.static('public'));
-
-
+// Welcome route
 app.get('/', (req, res) => {
     res.send('Welcome to my Movie API! Here you can find a list of my top 10 movies.');
 });
 
-// Your routes go here
+// CORS example route
 app.get('/example', (req, res) => {
     res.send('CORS is enabled for all domains!');
 });
 
-
+// Database connection
 (async () => {
   try {
     await mongoose.connect(process.env.CONNECTION_URI, { 
@@ -52,12 +46,7 @@ app.get('/example', (req, res) => {
   }
 })();
 
-
-
-
-
-
-//
+// Create new user
 app.post('/users', [
   check('name', 'Name is required').not().isEmpty(),
   check('email', 'Email is not valid').isEmail(),
@@ -69,20 +58,20 @@ app.post('/users', [
     return res.status(400).json({ errors: errors.array() });
   }
 
-  let hashedPassword = Users.hashPassword(req.body.password); // Corrected to match validation
+  let hashedPassword = Users.hashPassword(req.body.password);
 
   try {
-    const existingUser = await Users.findOne({ email: req.body.email }); // Corrected to use 'email'
+    const existingUser = await Users.findOne({ email: req.body.email });
     if (existingUser) {
       return res.status(400).json({ message: `${req.body.email} already exists`, status: 'error' });
     }
 
     const user = await Users.create({
-      name: req.body.name,  // Corrected to match schema field
-      password: hashedPassword,  // Corrected to match schema field
-      email: req.body.email,  // Corrected to match schema field
-      birthday: req.body.birthday,  // Corrected to match schema field
-      address: req.body.address  // If address is part of the request body
+      name: req.body.name,
+      password: hashedPassword,
+      email: req.body.email,
+      birthday: req.body.birthday,
+      address: req.body.address
     });
 
     res.status(201).json({ message: 'User created successfully', status: 'success', user: user });
@@ -92,6 +81,7 @@ app.post('/users', [
   }
 });
 
+// Create new movie
 app.post('/movies', async (req, res) => {
   const { 
     Title, 
@@ -108,8 +98,8 @@ app.post('/movies', async (req, res) => {
     const newMovie = await Movies.create({
       Title,
       Genre: {
-        Name: Genre.Name,             // Changed to match how it is in the request body
-        Description: Genre.Description // Changed to match how it is in the request body
+        Name: Genre.Name,
+        Description: Genre.Description
       },
       Description,
       Director: {
@@ -131,15 +121,7 @@ app.post('/movies', async (req, res) => {
   }
 });
 
-
-
-
-
-
-
- 
-
-// POST User login
+// User login
 app.post('/login', async (req, res) => {
   const { Username, Password } = req.body;
   
@@ -149,7 +131,6 @@ app.post('/login', async (req, res) => {
       return res.status(400).send('User not found');
     }
 
-    // Compare submitted password with the stored hashed password
     const isMatch = await user.comparePassword(Password);
     if (!isMatch) {
       return res.status(400).send('Invalid password');
@@ -162,9 +143,7 @@ app.post('/login', async (req, res) => {
   }
 });
 
-
-//READ
-
+// Get all users
 app.get('/users', async (req, res) => {
     await Users.find()
       .then((users) => {
@@ -174,10 +153,9 @@ app.get('/users', async (req, res) => {
         console.error(err);
         res.status(500).send('Error: ' + err);
       });
-  });
+});
 
-  
-  
+// Get user by username
 app.get('/users/:Username', async (req, res) => {
     await Users.findOne({ Username: req.params.Username })
       .then((user) => {
@@ -187,19 +165,16 @@ app.get('/users/:Username', async (req, res) => {
         console.error(err);
         res.status(500).send('Error: ' + err);
       });
-  });
+});
 
-// Read: Get all movies
+// Get all movies
 app.get('/movies', async (req, res) => {
   console.log('Movies route accessed');
   try {
       const movies = await Movies.find();
       console.log('movies', movies);
       console.log('Movies', Movies);
-   
-      
       console.log('CollectionName', Movies.collection.collectionName);
-
       res.status(200).json(movies)
   } catch (err) {
       console.error(err);
@@ -207,7 +182,7 @@ app.get('/movies', async (req, res) => {
   }
 });
 
-// Read: Get a movie by ID
+// Get movie by ID
 app.get('/movies/:id', async (req, res) => {
   try {
       const movie = await Movies.findById(req.params.id);
@@ -221,16 +196,14 @@ app.get('/movies/:id', async (req, res) => {
   }
 });
 
-
-
-//UPDATE
+// Update user
 app.put('/users/:Username', async (req, res) => {
   const { Password, Email, Birthday } = req.body;
   try {
       const user = await Users.findOneAndUpdate(
           { Username: req.params.Username },
           { Password, Email, Birthday },
-          { new: true } // To return the updated document
+          { new: true }
       );
       if (!user) {
           return res.status(404).send('User not found');
@@ -242,13 +215,14 @@ app.put('/users/:Username', async (req, res) => {
   }
 });
 
+// Update movie
 app.put('/movies/:id', async (req, res) => {
   const { Title, Genre, Description } = req.body;
   try {
       const movie = await Movies.findByIdAndUpdate(
           req.params.id,
           { Title, Genre, Description },
-          { new: true } // To return the updated document
+          { new: true }
       );
       if (!movie) {
           return res.status(404).send('Movie not found');
@@ -260,11 +234,7 @@ app.put('/movies/:id', async (req, res) => {
   }
 });
 
-
-
-
-
-// DELETE
+// Delete user
 app.delete('/users/:Username', async (req, res) => {
   try {
       const user = await Users.findOneAndDelete({ Username: req.params.Username });
@@ -278,7 +248,7 @@ app.delete('/users/:Username', async (req, res) => {
   }
 });
 
-
+// Delete movie
 app.delete('/movies/:id', async (req, res) => {
   try {
       const movie = await Movies.findByIdAndDelete(req.params.id);
@@ -292,19 +262,17 @@ app.delete('/movies/:id', async (req, res) => {
   }
 });
 
-
-
-
+// Error handling middleware
 app.use((err, req, res, next) => {
     console.error('Error:', err); 
     res.status(500).send('Something went wrong!'); 
 });
 
-
-
+// Start server
 const port = process.env.PORT || 8080;
 app.listen(port,() => {
  console.log('Listening on Port ' + port);
 });
 
-require('./auth')(app);git 
+// Auth (moved to end)
+require('./auth')(app);
