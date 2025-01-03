@@ -12,6 +12,12 @@ const cors = require('cors');
 const app = express();
 const { check, validationResult } = require('express-validator');
 
+
+app.get('/test', (req, res) => {
+  res.json({ message: 'Test endpoint working' });
+});
+
+
 require('./auth')(app);
 
 app.use(cors());
@@ -183,6 +189,7 @@ app.get('/users/:Username', async (req, res) => {
 
 // Read: Get all movies
 app.get('/movies', async (req, res) => {
+  console.log('Movies route accessed');
   try {
       const movies = await Movies.find();
       console.log('movies', movies);
