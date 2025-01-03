@@ -1,27 +1,31 @@
+// First your requires and setup
 const mongoose = require('mongoose');
 require('dotenv').config();
 const Models = require('./models.js');
-
 const Movies = Models.Movie;
 const Users = Models.User;
-
 const express = require('express');
 const morgan = require('morgan'); 
 const cors = require('cors');
 const app = express();
 const { check, validationResult } = require('express-validator');
 
-// Middleware
+// Then middleware
 app.use(cors());
 app.use(express.json()); 
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
 app.use(express.static('public'));
 
-// Test route
+// Add auth here, BEFORE routes
+require('./auth')(app);
+
+// Then all your routes
 app.get('/test', (req, res) => {
   res.json({ message: 'Test endpoint working' });
 });
+
+// Rest of your routes...
 
 // Welcome route
 app.get('/', (req, res) => {
@@ -274,5 +278,3 @@ app.listen(port,() => {
  console.log('Listening on Port ' + port);
 });
 
-// Auth (moved to end)
-require('./auth')(app);
