@@ -22,6 +22,18 @@ app.get('/test', (req, res) => {
 
 app.use(cors());
 
+//middleware
+app.use(express.json()); 
+app.use(express.urlencoded({ extended: true }));
+
+app.use(morgan('dev'));
+app.use(express.static('public'));
+
+
+app.get('/', (req, res) => {
+    res.send('Welcome to my Movie API! Here you can find a list of my top 10 movies.');
+});
+
 // Your routes go here
 app.get('/example', (req, res) => {
     res.send('CORS is enabled for all domains!');
@@ -43,17 +55,7 @@ app.get('/example', (req, res) => {
 
 
 
-//middleware
-app.use(express.json()); 
-app.use(express.urlencoded({ extended: true }));
 
-app.use(morgan('dev'));
-app.use(express.static('public'));
-
-
-app.get('/', (req, res) => {
-    res.send('Welcome to my Movie API! Here you can find a list of my top 10 movies.');
-});
 
 //
 app.post('/users', [
@@ -305,4 +307,4 @@ app.listen(port,() => {
  console.log('Listening on Port ' + port);
 });
 
-require('./auth')(app);
+require('./auth')(app);git 
