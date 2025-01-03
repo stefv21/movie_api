@@ -10,15 +10,16 @@ const cors = require('cors');
 const app = express();
 const { check, validationResult } = require('express-validator');
 
-// Then middleware
+// middleware
 app.use(cors());
 app.use(express.json()); 
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
 app.use(express.static('public'));
 
-// Add auth here, BEFORE routes
-require('./auth')(app);
+const router = express.Router();
+require('./auth')(router);
+app.use('/', router);
 
 // Then all your routes
 app.get('/test', (req, res) => {
