@@ -18,7 +18,7 @@ app.get('/test', (req, res) => {
 });
 
 
-require('./auth')(app);
+
 
 app.use(cors());
 
@@ -304,3 +304,5 @@ const port = process.env.PORT || 8080;
 app.listen(port,() => {
  console.log('Listening on Port ' + port);
 });
+
+require('./auth')(app);
