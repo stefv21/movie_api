@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 require('dotenv').config();
 const Models = require('./models.js');
-
 const Movies = Models.Movie;
 const Users = Models.User;
 
@@ -13,19 +12,25 @@ const app = express();
 const { check, validationResult } = require('express-validator');
 
 
-app.get('/test', (req, res) => {
-  res.json({ message: 'Test endpoint working' });
-});
+const uri = process.env.CONNECTION_URI;
 
+async function connectDB() {
+  try {
+    await mongoose.connect(uri, { 
+      useNewUrlParser: true, 
+      useUnifiedTopology: true 
+    });
+    console.log('Database connected successfully');
+  } catch (err) {
+    console.error('Database connection error:', err);
+  }
+}
 
-
-
-app.use(cors());
 
 //middleware
+app.use(cors());
 app.use(express.json()); 
 app.use(express.urlencoded({ extended: true }));
-
 app.use(morgan('dev'));
 app.use(express.static('public'));
 
@@ -34,26 +39,10 @@ app.get('/', (req, res) => {
     res.send('Welcome to my Movie API! Here you can find a list of my top 10 movies.');
 });
 
-// Your routes go here
-app.get('/example', (req, res) => {
-    res.send('CORS is enabled for all domains!');
+
+app.get('/test', (req, res) => {
+  res.json({ message: 'Test endpoint working' });
 });
-
-
-(async () => {
-  try {
-    await mongoose.connect(process.env.CONNECTION_URI, { 
-      useNewUrlParser: true, 
-      useUnifiedTopology: true
-    });
-    console.log('Database connected');
-  } catch (err) {
-    console.error('Database connection error:', err);
-  }
-})();
-
-
-
 
 
 
