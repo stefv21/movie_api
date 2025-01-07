@@ -287,8 +287,15 @@ app.use((err, req, res, next) => {
 
 
 const port = process.env.PORT || 8000;
-app.listen(port,() => {
- console.log('Listening on Port ' + port);
-});
+
+connectDB()
+  .then(() => {
+    app.listen(port, () => {
+      console.log('Listening on Port ' + port);
+    });
+  })
+  .catch((err) => {
+    console.error('Failed to connect to the database:', err);
+  });
 
 require('./auth')(app);
