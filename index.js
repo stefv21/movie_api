@@ -3,6 +3,8 @@ require('dotenv').config();
 const Models = require('./models.js');
 const Movies = Models.Movie;
 const Users = Models.User;
+const passport = require('passport');
+require('./passport');
 
 
 const express = require('express');
@@ -174,22 +176,22 @@ app.get('/users/:Username', async (req, res) => {
   });
 
 // Read: Get all movies
-app.get('/movies', async (req, res) => {
+
+app.get('/movies', passport.authenticate('jwt', { session: false }), async (req, res) => {
   console.log('Movies route accessed');
   try {
       const movies = await Movies.find();
       console.log('movies', movies);
       console.log('Movies', Movies);
-   
-      
       console.log('CollectionName', Movies.collection.collectionName);
 
-      res.status(200).json(movies)
+      res.status(200).json(movies);
   } catch (err) {
       console.error(err);
       res.status(500).send('Error: ' + err);
   }
 });
+
 
 // Read: Get a movie by ID
 app.get('/movies/:id', async (req, res) => {
