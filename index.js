@@ -1,9 +1,10 @@
 const mongoose = require('mongoose');
 require('dotenv').config();
 const Models = require('./models.js');
-
 const Movies = Models.Movie;
 const Users = Models.User;
+const passport = require('passport');
+require('./passport');
 
 
 const express = require('express');
@@ -12,35 +13,26 @@ const cors = require('cors');
 const app = express();
 const { check, validationResult } = require('express-validator');
 
-require('./auth')(app);
 
-app.use(cors());
+const uri = process.env.CONNECTION_URI;
 
-// Your routes go here
-app.get('/example', (req, res) => {
-    res.send('CORS is enabled for all domains!');
-});
-
-
-(async () => {
+async function connectDB() {
   try {
-    await mongoose.connect(process.env.CONNECTION_URI, { 
+    await mongoose.connect(uri, { 
       useNewUrlParser: true, 
-      useUnifiedTopology: true
+      useUnifiedTopology: true 
     });
-    console.log('Database connected');
+    console.log('Database connected successfully');
   } catch (err) {
     console.error('Database connection error:', err);
   }
-})();
-
-
+}
 
 
 //middleware
+app.use(cors());
 app.use(express.json()); 
 app.use(express.urlencoded({ extended: true }));
-
 app.use(morgan('dev'));
 app.use(express.static('public'));
 
@@ -48,6 +40,13 @@ app.use(express.static('public'));
 app.get('/', (req, res) => {
     res.send('Welcome to my Movie API! Here you can find a list of my top 10 movies.');
 });
+
+
+app.get('/test', (req, res) => {
+  res.json({ message: 'Test endpoint working' });
+});
+
+
 
 //
 app.post('/users', [
@@ -124,11 +123,6 @@ app.post('/movies', async (req, res) => {
 });
 
 
-
-
-
-
-
  
 
 // POST User login
@@ -182,21 +176,22 @@ app.get('/users/:Username', async (req, res) => {
   });
 
 // Read: Get all movies
-app.get('/movies', async (req, res) => {
+
+app.get('/movies', passport.authenticate('jwt', { session: false }), async (req, res) => {
+  console.log('Movies route accessed');
   try {
       const movies = await Movies.find();
       console.log('movies', movies);
       console.log('Movies', Movies);
-   
-      
       console.log('CollectionName', Movies.collection.collectionName);
 
-      res.status(200).json(movies)
+      res.status(200).json(movies);
   } catch (err) {
       console.error(err);
       res.status(500).send('Error: ' + err);
   }
 });
+
 
 // Read: Get a movie by ID
 app.get('/movies/:id', async (req, res) => {
@@ -293,7 +288,16 @@ app.use((err, req, res, next) => {
 
 
 
-const port = process.env.PORT || 8080;
-app.listen(port,() => {
- console.log('Listening on Port ' + port);
-});
+const port = process.env.PORT || 8000;
+
+connectDB()
+  .then(() => {
+    app.listen(port, () => {
+      console.log('Listening on Port ' + port);
+    });
+  })
+  .catch((err) => {
+    console.error('Failed to connect to the database:', err);
+  });
+
+require('./auth')(app);

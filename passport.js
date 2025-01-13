@@ -16,9 +16,8 @@ passport.use(
       passwordField: 'Password',
     },
     async (username, password, callback) => {
-      console.log(`${username} ${password}`);
-      await Users.findOne({ Username: username })
-      .then((user) => {
+      try {
+        const user = await Users.findOne({ Username: username });
         if (!user) {
           console.log('incorrect username');
           return callback(null, false, {
@@ -29,19 +28,16 @@ passport.use(
           console.log('incorrect password');
           return callback(null, false, { message: 'Incorrect password.' });
         }
-
         console.log('finished');
         return callback(null, user);
-      })
-      .catch((error) => {
-        if (error) {
-          console.log(error);
-          return callback(error);
-        }
-      });
-    },
-  ),
+      } catch (error) {
+        console.error('Error during authentication:', error);
+        return callback(error);
+      }
+    }
+  )
 );
+
 
 
 passport.use(
@@ -51,14 +47,18 @@ passport.use(
       secretOrKey: SECRET_KEY,
     },
     async (jwtPayload, callback) => {
-      return await Users.findById(jwtPayload._id)
-        .then((user) => {
-          return callback(null, user);
-        })
-        .catch((error) => {
-          return callback(error);
-        });
-    },
-  ),
+      try {
+        const user = await Users.findById(jwtPayload._id);
+        if (!user) {
+          return callback(null, false, { message: 'User not found.' });
+        }
+        return callback(null, user);
+      } catch (error) {
+        console.error('Error in JWT verification:', error);
+        return callback(error, false);
+      }
+    }
+  )
 );
+
 
