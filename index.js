@@ -4,7 +4,7 @@ const Models = require('./models.js');
 const Movies = Models.Movie;
 const Users = Models.User;
 const passport = require('passport');
-require('./passport');
+
 
 
 const express = require('express');
@@ -36,6 +36,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
 app.use(express.static('public'));
 
+require('./passport');
 
 app.get('/', (req, res) => {
     res.send('Welcome to my Movie API! Here you can find a list of my top 10 movies.');
