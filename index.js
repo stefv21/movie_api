@@ -28,9 +28,6 @@ async function connectDB() {
   }
 }
 
-
-//middleware
-app.use(cors());
 app.use(express.json()); 
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
