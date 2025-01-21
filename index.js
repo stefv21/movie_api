@@ -33,10 +33,11 @@ app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
 app.use(express.static('public'));
 
+
 const corsOptions = {
-  origin: ['http://localhost:3000', 'https://your-deployed-frontend-url.com'], // Add allowed origins here
-  methods: 'GET, POST, PUT, DELETE',
-  allowedHeaders: 'Content-Type, Authorization',
+  origin: '*',
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization'],
 };
 app.use(cors(corsOptions));
 
