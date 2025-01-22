@@ -130,31 +130,6 @@ app.post('/movies', async (req, res) => {
 });
 
 
- 
-
-// POST User login
-app.post('/login', async (req, res) => {
-  const { Username, Password } = req.body;
-  
-  try {
-    const user = await Users.findOne({ Username });
-    if (!user) {
-      return res.status(400).send('User not found');
-    }
-
-    // Compare submitted password with the stored hashed password
-    const isMatch = await user.comparePassword(Password);
-    if (!isMatch) {
-      return res.status(400).send('Invalid password');
-    }
-
-    res.status(200).send('Login successful');
-  } catch (err) {
-    console.error(err);
-    res.status(500).send('Error: ' + err);
-  }
-});
-
 
 //READ
 

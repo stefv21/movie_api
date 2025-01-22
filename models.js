@@ -23,7 +23,7 @@ const movieSchema = new mongoose.Schema({
 
 
 let userSchema = mongoose.Schema({
-  name: { type: String, required: true }, // Changed from username to name
+  username: { type: String, required: true }, // Changed from username to name
   password: { type: String, required: true },
   email: { type: String, required: true },
   birthday: { type: Date },
