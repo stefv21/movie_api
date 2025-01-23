@@ -57,7 +57,7 @@ app.get('/test', (req, res) => {
 
 //
 app.post('/users', [
-  check('name', 'Name is required').not().isEmpty(),
+  check('username', 'Username is required').not().isEmpty(),
   check('email', 'Email is not valid').isEmail(),
   check('password', 'Password must be at least 6 characters long').isLength({ min: 6 }),
   check('birthday', 'Birthday must be a valid date').optional().isDate()
@@ -76,7 +76,7 @@ app.post('/users', [
     }
 
     const user = await Users.create({
-      name: req.body.name,  // Corrected to match schema field
+      username: req.body.username,  // Corrected to match schema field
       password: hashedPassword,  // Corrected to match schema field
       email: req.body.email,  // Corrected to match schema field
       birthday: req.body.birthday,  // Corrected to match schema field
