@@ -2,7 +2,7 @@
   "_id": {
     "$oid": "675b09e88f311542b0f0437e"
   },
-  "name": "John Doe",
+  "username": "John Doe",
   "email": "john.doe@example.com",
   "birthday": {
     "$date": "1985-02-19T00:00:00.000Z"

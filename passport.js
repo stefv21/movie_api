@@ -17,7 +17,7 @@ passport.use(
     },
     async (username, password, callback) => {
       try {
-        const user = await Users.findOne({ Username: username });
+        const user = await Users.findOne({ username: username });
         if (!user) {
           console.log('incorrect username');
           return callback(null, false, {
@@ -48,7 +48,7 @@ passport.use(
     },
     async (jwtPayload, callback) => {
       try {
-        const user = await Users.findById(jwtPayload._id);
+        const user = await Users.findById(jwtPayload.id);
         if (!user) {
           return callback(null, false, { message: 'User not found.' });
         }

@@ -4,12 +4,15 @@ const Models = require('./models.js');
 const Movies = Models.Movie;
 const Users = Models.User;
 const passport = require('passport');
-require('./passport');
+
 
 
 const express = require('express');
 const morgan = require('morgan'); 
 const cors = require('cors');
+let allowedOrigins = ['http://localhost:8080', 'http://testsite.com', 'http://localhost:1234',
+  'https://myflixapp-0225.netlify.app'];
+
 const app = express();
 const { check, validationResult } = require('express-validator');
 
@@ -28,14 +31,33 @@ async function connectDB() {
   }
 }
 
-
-//middleware
-app.use(cors());
 app.use(express.json()); 
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
 app.use(express.static('public'));
 
+
+const corsOptions = {
+  origin: '*',
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization'],
+};
+
+
+app.use(cors({
+  origin: (origin, callback) => {
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) === -1) { // If a specific origin isn’t found on the list of allowed origins
+      let message = 'The CORS policy for this application doesn’t allow access from origin ' + origin;
+      return callback(new Error(message), false);
+    }
+    return callback(null, true);
+  }
+}));
+
+
+
+require('./passport');
 
 app.get('/', (req, res) => {
     res.send('Welcome to my Movie API! Here you can find a list of my top 10 movies.');
@@ -50,7 +72,7 @@ app.get('/test', (req, res) => {
 
 //
 app.post('/users', [
-  check('name', 'Name is required').not().isEmpty(),
+  check('username', 'Username is required').not().isEmpty(),
   check('email', 'Email is not valid').isEmail(),
   check('password', 'Password must be at least 6 characters long').isLength({ min: 6 }),
   check('birthday', 'Birthday must be a valid date').optional().isDate()
@@ -69,7 +91,7 @@ app.post('/users', [
     }
 
     const user = await Users.create({
-      name: req.body.name,  // Corrected to match schema field
+      username: req.body.username,  // Corrected to match schema field
       password: hashedPassword,  // Corrected to match schema field
       email: req.body.email,  // Corrected to match schema field
       birthday: req.body.birthday,  // Corrected to match schema field
@@ -122,31 +144,6 @@ app.post('/movies', async (req, res) => {
   }
 });
 
-
- 
-
-// POST User login
-app.post('/login', async (req, res) => {
-  const { Username, Password } = req.body;
-  
-  try {
-    const user = await Users.findOne({ Username });
-    if (!user) {
-      return res.status(400).send('User not found');
-    }
-
-    // Compare submitted password with the stored hashed password
-    const isMatch = await user.comparePassword(Password);
-    if (!isMatch) {
-      return res.status(400).send('Invalid password');
-    }
-
-    res.status(200).send('Login successful');
-  } catch (err) {
-    console.error(err);
-    res.status(500).send('Error: ' + err);
-  }
-});
 
 
 //READ
@@ -301,3 +298,4 @@ connectDB()
   });
 
 require('./auth')(app);
+

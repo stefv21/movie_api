@@ -29,9 +29,9 @@ const SECRET_KEY = process.env.JWT_SECRET || 'your_jwt_secret';
  */
 const generateJWTToken = (user, expiresIn = '1h') => {
   const payload = {
-    id: user.id,
+    id: user._id,
     username: user.username,
-  };
+};
   return jwt.sign(payload, SECRET_KEY, { expiresIn });
 };
 
