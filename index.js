@@ -10,8 +10,7 @@ const passport = require('passport');
 const express = require('express');
 const morgan = require('morgan'); 
 const cors = require('cors');
-let allowedOrigins = ['http://localhost:8080', 'http://testsite.com', 'http://localhost:1234',
-  'https://myflixapp-0225.netlify.app'];
+app.use(cors());
 
 const app = express();
 const { check, validationResult } = require('express-validator');
