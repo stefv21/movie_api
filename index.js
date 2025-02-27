@@ -9,6 +9,9 @@ const passport = require('passport');
 
 const express = require('express');
 const app = express();
+const allowedOrigins = [
+  "https://myflixapp-0225.netlify.app","http://localhost:3000"];
+
 const morgan = require('morgan'); 
 const cors = require('cors');
 app.use(cors());
