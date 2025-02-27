@@ -9,8 +9,7 @@ const passport = require('passport');
 
 const express = require('express');
 const app = express();
-const allowedOrigins = [
-  "https://myflixapp-0225.netlify.app","http://localhost:3000"];
+const allowedOrigins = ["http://localhost:3000"];
 
 const morgan = require('morgan'); 
 const cors = require('cors');
@@ -48,13 +47,17 @@ const corsOptions = {
 
 
 app.use(cors({
-  origin: (origin, callback) => {
+  origin: function(origin, callback) {
+    console.log("Request origin:", origin);
+    // Allow requests with no origin (like curl, postman)
     if (!origin) return callback(null, true);
-    if (allowedOrigins.indexOf(origin) === -1) { // If a specific origin isn’t found on the list of allowed origins
-      let message = 'The CORS policy for this application doesn’t allow access from origin ' + origin;
-      return callback(new Error(message), false);
+
+    // Allow if the origin includes your Netlify base domain
+    if (origin.indexOf("myflixapp-0225.netlify.app") !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error("The CORS policy for this application doesn’t allow access from origin " + origin));
     }
-    return callback(null, true);
   }
 }));
 
