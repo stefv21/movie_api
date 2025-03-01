@@ -1,66 +1,154 @@
-<!DOCTYPE html>
-<html lang="en">
+Project: myFlix React App
+
+Welcome to myFlix—a dynamic, single-page movie application built using React that connects to an existing REST API and database. This project demonstrates full-stack JavaScript development with the MERN (MongoDB, Express, React, Node.js) stack.
+
+## Overview
+
+**Objective:**  
+Build the client-side for myFlix using React, creating a smooth and interactive interface that communicates with the pre-built server-side.
+
+**Context:**  
+In the past, web pages were rendered server-side, which could lead to slower and less engaging user experiences. With modern browsers and React, client-side applications now deliver a faster and more responsive experience. This project upgrades myFlix by adding an intuitive UI for movie browsing, detailed views, and personalized profiles.
+
+## The 5 Ws
+
+- **Who:**  
+  Movie enthusiasts who enjoy exploring detailed information about films.
+
+- **What:**  
+  A responsive, single-page application featuring multiple views (Main, Single Movie, Login, Signup, Profile) with rich interactions.
+
+- **When:**  
+  Available anytime for users to discover and manage movie information and their favorites.
+
+- **Where:**  
+  Hosted online, ensuring a consistent experience across all devices.
+
+- **Why:**  
+  To give movie fans an engaging way to access movie details and keep track of their favorite films.
+
+## Design Criteria
+
+### User Stories
+- **Movie Information:**  
+  Users can access details about movies they’re interested in.
+- **Profile Creation:**  
+  Users can register and manage profiles to save their favorite movies.
+
+### Essential Features
+
+- **Main View:**
+  - Displays all movies with images, titles, and descriptions.
+  - Includes a search feature to filter the movie list.
+  - Enables users to select a movie for more details.
+  - Offers logout and navigation to the Profile view.
+
+- **Single Movie View:**
+  - Shows detailed information about a selected movie (description, genre, director, image).
+  - Allows users to add movies to their list of favorites.
+
+- **Authentication Views:**
+  - **Login:** Users can sign in with a username and password.
+  - **Signup:** New users can register with a username, password, email, and date of birth.
+
+- **Profile View:**
+  - Displays user details and favorite movies.
+  - Allows users to update their information or deregister.
+
+### Addtional Features
+
+- **Actors, Genre, and Director Views:**  
+  Provide additional details like actor bios, genre descriptions, or director information.
+- **Enhanced Single Movie View:**  
+  Options such as tooltips for extra info, sharing features, or displaying related movies.
+- **Sorting & “To Watch” List:**  
+  Allow users to sort movies and create custom lists.
 
 
-<body>
-  <header>
-    <h1>Movie API</h1>
-    <p>A simple API to manage users and movies with Node.js, Express, and MongoDB</p>
-  </header>
+## Technical Requirements
 
-  <div class="section">
-    <h2>Features</h2>
-    <div class="feature-list">
-      <ul>
-        <li><strong>User Management</strong>:
-          <ul>
-            <li>Create a new user</li>
-            <li>Retrieve all users or a user by username</li>
-            <li>Update a user's details</li>
-            <li>Delete a user</li>
-          </ul>
-        </li>
-      </ul>
-      <ul>
-        <li><strong>Movie Management</strong>:
-          <ul>
-            <li>Create a new movie</li>
-            <li>Retrieve all movies or a movie by ID</li>
-            <li>Update a movie's details</li>
-            <li>Delete a movie</li>
-          </ul>
-        </li>
-      </ul>
-    </div>
-  </div>
+- **Single-Page Application (SPA):**  
+  Built using React and React Router for smooth navigation.
+- **Build Tool:**  
+  Uses Parcel for bundling.
+- **Modern JavaScript:**  
+  Written in ES2015+ with function components.
+- **Styling:**  
+  Bootstrap is used for a responsive, modern look.
+- **State Management:**  
+  React Redux may be used for features like movie filtering.
 
-  <div class="section">
-    <h2>API Endpoints</h2>
-    <h3>Users</h3>
-    <ul>
-      <li><strong>POST /users/create:</strong> Create a new user</li>
-      <li><strong>GET /users:</strong> Get all users</li>
-      <li><strong>GET /users/:Username:</strong> Get a user by username</li>
-      <li><strong>PUT /users/:Username:</strong> Update a user by username</li>
-      <li><strong>DELETE /users/:Username:</strong> Delete a user by username</li>
-    </ul>
+## Table of Contents
+- [Installation](#installation)
+- [Usage](#usage)
+- [Code Examples](#code-examples)
+- [Contributing](#contributing)
+- [License](#license)
+- [Contact](#contact)
 
-  </div>
+## Installation
 
-  <div class="section">
-    <h2>Technologies Used</h2>
-    <ul class="tech-list">
-      <li><strong>Node.js</strong>: JavaScript runtime environment for building server-side applications.</li>
-      <li><strong>Express</strong>: Web framework for Node.js to handle routing and HTTP requests.</li>
-      <li><strong>MongoDB</strong>: NoSQL database used to store user and movie data.</li>
-      <li><strong>Mongoose</strong>: ODM (Object Document Mapper) for MongoDB, used to interact with the database.</li>
-      <li><strong>Morgan</strong>: HTTP request logger middleware for Node.js.</li>
-    </ul>
-  </div>
+1. **Clone the Repository:**
+    ```bash
+    git clone https://github.com/yourusername/myFlix-react-app.git
+    cd myFlix-react-app
+    ```
 
+2. **Install Dependencies:**
+    ```bash
+    npm install
+    ```
 
-  <footer>
-    <p>Project licensed under the MIT License. See <a href="#">LICENSE</a> for details.</p>
-  </footer>
-</body>
-</html>
+3. **Configure Environment Variables:**
+    Create a `.env` file in the root directory with any necessary configuration (e.g., API URL):
+    ```env
+    REACT_APP_API_URL=https://your-movie-api.com
+    ```
+
+4. **Run the Application:**
+    ```bash
+    npm start
+    ```
+    Visit [http://localhost:3000](http://localhost:3000) in your browser.
+
+## Usage
+
+- **Navigation:**  
+  Use the navigation bar to access different views (Main, Movie Details, Profile, etc.).
+- **Search:**  
+  Filter movies using the built-in search functionality.
+- **Interactions:**  
+  Click on movies to see details and add them to your favorites.
+- **User Management:**  
+  Register, log in, update your profile, or deregister as needed.
+
+## Code Examples
+
+### App.js
+
+```javascript
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import MainView from './components/MainView';
+import MovieView from './components/MovieView';
+import LoginView from './components/LoginView';
+import SignupView from './components/SignupView';
+import ProfileView from './components/ProfileView';
+
+function App() {
+  return (
+    <Router>
+      <div className="app-container">
+        <Routes>
+          <Route path="/" element={<MainView />} />
+          <Route path="/movies/:id" element={<MovieView />} />
+          <Route path="/login" element={<LoginView />} />
+          <Route path="/signup" element={<SignupView />} />
+          <Route path="/profile" element={<ProfileView />} />
+        </Routes>
+      </div>
+    </Router>
+  );
+}
+
+export default App;
