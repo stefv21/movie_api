@@ -9,7 +9,7 @@ const passport = require('passport');
 
 const express = require('express');
 const app = express();
-const allowedOrigins = ["http://localhost:3000"];
+const allowedOrigins = ["http://localhost:3000", "https://stefv21.github.io/myFlix-Angular-client/"];
 
 const morgan = require('morgan'); 
 const cors = require('cors');
@@ -54,6 +54,8 @@ app.use(cors({
 
     // Allow if the origin includes your Netlify base domain
     if (origin.indexOf("myflixapp-0225.netlify.app") !== -1) {
+      callback(null, true);
+    } else if (origin.indexOf("stefv21.github.io/myFlix-Angular-client") !== -1) {
       callback(null, true);
     } else {
       callback(new Error("The CORS policy for this application doesn’t allow access from origin " + origin));
