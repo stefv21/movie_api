@@ -74,22 +74,26 @@ app.use(cors({
 require('./passport');
 
 /**
- * Welcome endpoint
- * @name GET/
- * @function
- * @param {Object} req - Express request object
- * @param {Object} res - Express response object
+ * Welcome endpoint - Returns welcome message
+ * @route GET /
+ * @returns {string} 200 - Welcome message
+ * @example
+ * // Response:
+ * "Welcome to my Movie API! Here you can find a list of my top 10 movies."
  */
 app.get('/', (req, res) => {
     res.send('Welcome to my Movie API! Here you can find a list of my top 10 movies.');
 });
 
 /**
- * Test endpoint
- * @name GET/test
- * @function
- * @param {Object} req - Express request object
- * @param {Object} res - Express response object
+ * Test endpoint - Returns test message
+ * @route GET /test
+ * @returns {Object} 200 - Test response object
+ * @example
+ * // Response:
+ * {
+ *   "message": "Test endpoint working"
+ * }
  */
 app.get('/test', (req, res) => {
   res.json({ message: 'Test endpoint working' });
@@ -97,11 +101,33 @@ app.get('/test', (req, res) => {
 
 /**
  * Register a new user
- * @name POST/users
- * @function
- * @param {Object} req - Express request object
- * @param {Object} res - Express response object
- * @returns {Object} JSON response with user creation status
+ * @route POST /users
+ * @param {string} username.body.required - Username (min 1 character)
+ * @param {string} email.body.required - Valid email address
+ * @param {string} password.body.required - Password (min 6 characters)
+ * @param {string} birthday.body.optional - Date of birth (YYYY-MM-DD)
+ * @param {string} address.body.optional - User address
+ * @returns {Object} 201 - User creation success
+ * @returns {Object} 400 - Validation error or user exists
+ * @returns {Object} 500 - Server error
+ * @example
+ * // Request body:
+ * {
+ *   "username": "john_doe",
+ *   "email": "john@example.com",
+ *   "password": "password123",
+ *   "birthday": "1990-01-01"
+ * }
+ * @example
+ * // Response:
+ * {
+ *   "message": "User created successfully",
+ *   "status": "success",
+ *   "user": {
+ *     "username": "john_doe",
+ *     "email": "john@example.com"
+ *   }
+ * }
  */
 app.post('/users', [
   check('username', 'Username is required').not().isEmpty(),
@@ -139,11 +165,33 @@ app.post('/users', [
 
 /**
  * Create a new movie
- * @name POST/movies
- * @function
- * @param {Object} req - Express request object
- * @param {Object} res - Express response object
- * @returns {Object} Created movie object
+ * @route POST /movies
+ * @param {string} Title.body.required - Movie title
+ * @param {Object} Genre.body.required - Genre object with Name and Description
+ * @param {string} Description.body.required - Movie description
+ * @param {Object} Director.body.required - Director object with Name, Bio, Birth, Death
+ * @param {string} ImagePath.body.optional - Movie poster image URL
+ * @param {boolean} Featured.body.optional - Whether movie is featured
+ * @param {number} ReleaseYear.body.optional - Movie release year
+ * @param {number} Runtime.body.optional - Movie runtime in minutes
+ * @returns {Object} 201 - Created movie object
+ * @returns {Object} 500 - Server error
+ * @example
+ * // Request body:
+ * {
+ *   "Title": "The Matrix",
+ *   "Genre": {
+ *     "Name": "Sci-Fi",
+ *     "Description": "Science Fiction"
+ *   },
+ *   "Description": "A computer hacker learns reality is a simulation",
+ *   "Director": {
+ *     "Name": "The Wachowskis",
+ *     "Bio": "Film directors",
+ *     "Birth": "1965"
+ *   },
+ *   "ReleaseYear": 1999
+ * }
  */
 app.post('/movies', async (req, res) => {
   const { 
@@ -186,11 +234,18 @@ app.post('/movies', async (req, res) => {
 
 /**
  * Get all users
- * @name GET/users
- * @function
- * @param {Object} req - Express request object
- * @param {Object} res - Express response object
- * @returns {Array} Array of user objects
+ * @route GET /users
+ * @returns {Array} 201 - Array of user objects
+ * @returns {Object} 500 - Server error
+ * @example
+ * // Response:
+ * [
+ *   {
+ *     "username": "john_doe",
+ *     "email": "john@example.com",
+ *     "birthday": "1990-01-01"
+ *   }
+ * ]
  */
 app.get('/users', async (req, res) => {
     await Users.find()
@@ -205,11 +260,17 @@ app.get('/users', async (req, res) => {
 
 /**
  * Get user by username
- * @name GET/users/:Username
- * @function
- * @param {Object} req - Express request object
- * @param {Object} res - Express response object
- * @returns {Object} User object
+ * @route GET /users/{Username}
+ * @param {string} Username.path.required - Username to retrieve
+ * @returns {Object} 200 - User object
+ * @returns {Object} 500 - Server error
+ * @example
+ * // Response:
+ * {
+ *   "username": "john_doe",
+ *   "email": "john@example.com",
+ *   "birthday": "1990-01-01"
+ * }
  */
 app.get('/users/:Username', async (req, res) => {
     await Users.findOne({ Username: req.params.Username })
@@ -223,12 +284,29 @@ app.get('/users/:Username', async (req, res) => {
   });
 
 /**
- * Get all movies (requires authentication)
- * @name GET/movies
- * @function
- * @param {Object} req - Express request object
- * @param {Object} res - Express response object
- * @returns {Array} Array of movie objects
+ * Get all movies (requires JWT authentication)
+ * @route GET /movies
+ * @param {string} Authorization.header.required - Bearer JWT token
+ * @returns {Array} 200 - Array of movie objects
+ * @returns {Object} 401 - Unauthorized
+ * @returns {Object} 500 - Server error
+ * @example
+ * // Request headers:
+ * {
+ *   "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+ * }
+ * @example
+ * // Response:
+ * [
+ *   {
+ *     "Title": "The Matrix",
+ *     "Genre": {
+ *       "Name": "Sci-Fi",
+ *       "Description": "Science Fiction"
+ *     },
+ *     "Description": "A computer hacker learns reality is a simulation"
+ *   }
+ * ]
  */
 app.get('/movies', passport.authenticate('jwt', { session: false }), async (req, res) => {
   console.log('Movies route accessed');
@@ -247,11 +325,21 @@ app.get('/movies', passport.authenticate('jwt', { session: false }), async (req,
 
 /**
  * Get movie by ID
- * @name GET/movies/:id
- * @function
- * @param {Object} req - Express request object
- * @param {Object} res - Express response object
- * @returns {Object} Movie object
+ * @route GET /movies/{id}
+ * @param {string} id.path.required - Movie ID
+ * @returns {Object} 200 - Movie object
+ * @returns {string} 404 - Movie not found
+ * @returns {Object} 500 - Server error
+ * @example
+ * // Response:
+ * {
+ *   "Title": "The Matrix",
+ *   "Genre": {
+ *     "Name": "Sci-Fi",
+ *     "Description": "Science Fiction"
+ *   },
+ *   "Description": "A computer hacker learns reality is a simulation"
+ * }
  */
 app.get('/movies/:id', async (req, res) => {
   try {
@@ -268,11 +356,27 @@ app.get('/movies/:id', async (req, res) => {
 
 /**
  * Update user by username
- * @name PUT/users/:Username
- * @function
- * @param {Object} req - Express request object
- * @param {Object} res - Express response object
- * @returns {Object} Updated user object
+ * @route PUT /users/{Username}
+ * @param {string} Username.path.required - Username to update
+ * @param {string} Password.body.optional - New password
+ * @param {string} Email.body.optional - New email
+ * @param {string} Birthday.body.optional - New birthday
+ * @returns {Object} 200 - Updated user object
+ * @returns {string} 404 - User not found
+ * @returns {Object} 500 - Server error
+ * @example
+ * // Request body:
+ * {
+ *   "Email": "newemail@example.com",
+ *   "Birthday": "1991-01-01"
+ * }
+ * @example
+ * // Response:
+ * {
+ *   "username": "john_doe",
+ *   "email": "newemail@example.com",
+ *   "birthday": "1991-01-01"
+ * }
  */
 app.put('/users/:Username', async (req, res) => {
   const { Password, Email, Birthday } = req.body;
@@ -294,11 +398,20 @@ app.put('/users/:Username', async (req, res) => {
 
 /**
  * Update movie by ID
- * @name PUT/movies/:id
- * @function
- * @param {Object} req - Express request object
- * @param {Object} res - Express response object
- * @returns {Object} Updated movie object
+ * @route PUT /movies/{id}
+ * @param {string} id.path.required - Movie ID to update
+ * @param {string} Title.body.optional - New movie title
+ * @param {string} Genre.body.optional - New movie genre
+ * @param {string} Description.body.optional - New movie description
+ * @returns {Object} 200 - Updated movie object
+ * @returns {string} 404 - Movie not found
+ * @returns {Object} 500 - Server error
+ * @example
+ * // Request body:
+ * {
+ *   "Title": "The Matrix Reloaded",
+ *   "Description": "Neo and the rebel leaders estimate 72 hours until Zion falls"
+ * }
  */
 app.put('/movies/:id', async (req, res) => {
   const { Title, Genre, Description } = req.body;
@@ -320,11 +433,14 @@ app.put('/movies/:id', async (req, res) => {
 
 /**
  * Delete user by username
- * @name DELETE/users/:Username
- * @function
- * @param {Object} req - Express request object
- * @param {Object} res - Express response object
- * @returns {String} Deletion confirmation message
+ * @route DELETE /users/{Username}
+ * @param {string} Username.path.required - Username to delete
+ * @returns {string} 200 - Deletion confirmation message
+ * @returns {string} 404 - User not found
+ * @returns {Object} 500 - Server error
+ * @example
+ * // Response:
+ * "User john_doe deleted"
  */
 app.delete('/users/:Username', async (req, res) => {
   try {
@@ -341,11 +457,14 @@ app.delete('/users/:Username', async (req, res) => {
 
 /**
  * Delete movie by ID
- * @name DELETE/movies/:id
- * @function
- * @param {Object} req - Express request object
- * @param {Object} res - Express response object
- * @returns {String} Deletion confirmation message
+ * @route DELETE /movies/{id}
+ * @param {string} id.path.required - Movie ID to delete
+ * @returns {string} 200 - Deletion confirmation message
+ * @returns {string} 404 - Movie not found
+ * @returns {Object} 500 - Server error
+ * @example
+ * // Response:
+ * "Movie with ID 507f1f77bcf86cd799439011 deleted"
  */
 app.delete('/movies/:id', async (req, res) => {
   try {
