@@ -1,154 +1,201 @@
-Project: myFlix React App
+# myFlix Movie API
 
-Welcome to myFlix—a dynamic, single-page movie application built using React that connects to an existing REST API and database. This project demonstrates full-stack JavaScript development with the MERN (MongoDB, Express, React, Node.js) stack.
+A RESTful API for a movie database application built with Node.js, Express, and MongoDB. This API provides endpoints for managing movies, users, and user authentication.
 
 ## Overview
 
 **Objective:**  
-Build the client-side for myFlix using React, creating a smooth and interactive interface that communicates with the pre-built server-side.
+Build a server-side API that provides movie information and user management functionality for the myFlix application.
 
 **Context:**  
-In the past, web pages were rendered server-side, which could lead to slower and less engaging user experiences. With modern browsers and React, client-side applications now deliver a faster and more responsive experience. This project upgrades myFlix by adding an intuitive UI for movie browsing, detailed views, and personalized profiles.
+This API serves as the backend for a movie application, handling data storage, user authentication, and providing movie information to client applications.
 
-## The 5 Ws
+## Features
 
-- **Who:**  
-  Movie enthusiasts who enjoy exploring detailed information about films.
+- **Movie Management:** CRUD operations for movies with detailed information
+- **User Management:** User registration, authentication, and profile management
+- **JWT Authentication:** Secure authentication using JSON Web Tokens
+- **Data Validation:** Input validation using express-validator
+- **Password Security:** Bcrypt password hashing
+- **CORS Support:** Cross-origin resource sharing for client applications
 
-- **What:**  
-  A responsive, single-page application featuring multiple views (Main, Single Movie, Login, Signup, Profile) with rich interactions.
+## Tech Stack
 
-- **When:**  
-  Available anytime for users to discover and manage movie information and their favorites.
+- **Runtime:** Node.js
+- **Framework:** Express.js
+- **Database:** MongoDB with Mongoose ODM
+- **Authentication:** Passport.js with JWT strategy
+- **Validation:** express-validator
+- **Security:** bcryptjs for password hashing
+- **Documentation:** JSDoc
 
-- **Where:**  
-  Hosted online, ensuring a consistent experience across all devices.
+## API Endpoints
 
-- **Why:**  
-  To give movie fans an engaging way to access movie details and keep track of their favorite films.
+### Authentication
+- `POST /users` - Register a new user
+- `POST /login` - User login (returns JWT token)
 
-## Design Criteria
+### Movies
+- `GET /movies` - Get all movies (requires authentication)
+- `GET /movies/:id` - Get movie by ID
+- `POST /movies` - Create a new movie
+- `PUT /movies/:id` - Update movie by ID
+- `DELETE /movies/:id` - Delete movie by ID
 
-### User Stories
-- **Movie Information:**  
-  Users can access details about movies they’re interested in.
-- **Profile Creation:**  
-  Users can register and manage profiles to save their favorite movies.
+### Users
+- `GET /users` - Get all users
+- `GET /users/:Username` - Get user by username
+- `PUT /users/:Username` - Update user by username
+- `DELETE /users/:Username` - Delete user by username
 
-### Essential Features
-
-- **Main View:**
-  - Displays all movies with images, titles, and descriptions.
-  - Includes a search feature to filter the movie list.
-  - Enables users to select a movie for more details.
-  - Offers logout and navigation to the Profile view.
-
-- **Single Movie View:**
-  - Shows detailed information about a selected movie (description, genre, director, image).
-  - Allows users to add movies to their list of favorites.
-
-- **Authentication Views:**
-  - **Login:** Users can sign in with a username and password.
-  - **Signup:** New users can register with a username, password, email, and date of birth.
-
-- **Profile View:**
-  - Displays user details and favorite movies.
-  - Allows users to update their information or deregister.
-
-### Addtional Features
-
-- **Actors, Genre, and Director Views:**  
-  Provide additional details like actor bios, genre descriptions, or director information.
-- **Enhanced Single Movie View:**  
-  Options such as tooltips for extra info, sharing features, or displaying related movies.
-- **Sorting & “To Watch” List:**  
-  Allow users to sort movies and create custom lists.
-
-
-## Technical Requirements
-
-- **Single-Page Application (SPA):**  
-  Built using React and React Router for smooth navigation.
-- **Build Tool:**  
-  Uses Parcel for bundling.
-- **Modern JavaScript:**  
-  Written in ES2015+ with function components.
-- **Styling:**  
-  Bootstrap is used for a responsive, modern look.
-- **State Management:**  
-  React Redux may be used for features like movie filtering.
-
-## Table of Contents
-- [Installation](#installation)
-- [Usage](#usage)
-- [Code Examples](#code-examples)
-- [Contributing](#contributing)
-- [License](#license)
-- [Contact](#contact)
+### Utility
+- `GET /` - Welcome message
+- `GET /test` - Test endpoint
 
 ## Installation
 
 1. **Clone the Repository:**
-    ```bash
-    git clone https://github.com/yourusername/myFlix-react-app.git
-    cd myFlix-react-app
-    ```
+   ```bash
+   git clone https://github.com/yourusername/movie-api.git
+   cd movie-api
+   ```
 
 2. **Install Dependencies:**
-    ```bash
-    npm install
-    ```
+   ```bash
+   npm install
+   ```
 
-3. **Configure Environment Variables:**
-    Create a `.env` file in the root directory with any necessary configuration (e.g., API URL):
-    ```env
-    REACT_APP_API_URL=https://your-movie-api.com
-    ```
+3. **Environment Variables:**
+   Create a `.env` file in the root directory:
+   ```env
+   CONNECTION_URI=mongodb://localhost:27017/myFlixDB
+   JWT_SECRET=your_jwt_secret_key
+   PORT=8000
+   ```
 
-4. **Run the Application:**
-    ```bash
-    npm start
-    ```
-    Visit [http://localhost:3000](http://localhost:3000) in your browser.
+4. **Start the Server:**
+   ```bash
+   npm start
+   ```
+   
+   For development with auto-restart:
+   ```bash
+   npm run dev
+   ```
 
 ## Usage
 
-- **Navigation:**  
-  Use the navigation bar to access different views (Main, Movie Details, Profile, etc.).
-- **Search:**  
-  Filter movies using the built-in search functionality.
-- **Interactions:**  
-  Click on movies to see details and add them to your favorites.
-- **User Management:**  
-  Register, log in, update your profile, or deregister as needed.
+### Authentication
+Most endpoints require JWT authentication. Include the token in the Authorization header:
+```
+Authorization: Bearer <your_jwt_token>
+```
 
-## Code Examples
+### Example Requests
 
-### App.js
+**Register a User:**
+```bash
+curl -X POST http://localhost:8000/users \
+  -H "Content-Type: application/json" \
+  -d '{
+    "username": "john_doe",
+    "email": "john@example.com",
+    "password": "password123",
+    "birthday": "1990-01-01"
+  }'
+```
 
+**Get All Movies:**
+```bash
+curl -X GET http://localhost:8000/movies \
+  -H "Authorization: Bearer <your_jwt_token>"
+```
+
+## Data Models
+
+### Movie Schema
 ```javascript
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import MainView from './components/MainView';
-import MovieView from './components/MovieView';
-import LoginView from './components/LoginView';
-import SignupView from './components/SignupView';
-import ProfileView from './components/ProfileView';
-
-function App() {
-  return (
-    <Router>
-      <div className="app-container">
-        <Routes>
-          <Route path="/" element={<MainView />} />
-          <Route path="/movies/:id" element={<MovieView />} />
-          <Route path="/login" element={<LoginView />} />
-          <Route path="/signup" element={<SignupView />} />
-          <Route path="/profile" element={<ProfileView />} />
-        </Routes>
-      </div>
-    </Router>
-  );
+{
+  Title: String,
+  Description: String,
+  Genre: {
+    Name: String,
+    Description: String
+  },
+  Director: {
+    Name: String,
+    Bio: String,
+    Birth: String,
+    Death: String
+  },
+  ImagePath: String,
+  Featured: Boolean,
+  ReleaseYear: Number,
+  Runtime: Number
 }
+```
 
-export default App;
+### User Schema
+```javascript
+{
+  username: String,
+  password: String (hashed),
+  email: String,
+  birthday: Date,
+  favoriteMovies: [ObjectId]
+}
+```
+
+## Documentation
+
+API documentation is generated using JSDoc and can be found in the `out/` directory after running:
+```bash
+npx jsdoc index.js
+```
+
+Open `out/index.html` in your browser to view the complete API documentation.
+
+## Deployment
+
+The API is configured for deployment on Heroku with the following allowed origins:
+- `http://localhost:3000` (development)
+- `https://myflixapp-0225.netlify.app` (production client)
+- `https://stefv21.github.io/myFlix-Angular-client/` (Angular client)
+
+## Dependencies
+
+### Production Dependencies
+- **express** - Web framework
+- **mongoose** - MongoDB ODM
+- **passport** - Authentication middleware
+- **passport-jwt** - JWT authentication strategy
+- **passport-local** - Local authentication strategy
+- **jsonwebtoken** - JWT token generation
+- **bcryptjs** - Password hashing
+- **express-validator** - Input validation
+- **cors** - Cross-origin resource sharing
+- **morgan** - HTTP request logger
+- **dotenv** - Environment variable management
+- **body-parser** - Parse incoming request bodies
+- **lodash** - Utility library
+- **uuid** - Generate unique identifiers
+- **react** - React library (for client integration)
+- **react-dom** - React DOM library
+
+### Development Dependencies
+- **jsdoc** - API documentation generation
+- **eslint** - Code linting
+- **nodemon** - Development server with auto-restart
+- **process** - Process utilities
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add tests if applicable
+5. Submit a pull request
+
+## License
+
+This project is licensed under the ISC License.
