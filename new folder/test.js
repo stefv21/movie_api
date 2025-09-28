@@ -47,6 +47,14 @@ app.get('/students/:name', (req, res) => {
 
 // Adds data for a new student to our list of students.
 app.post('/students', (req, res) => {
+  // Basic CSRF protection - check origin
+  const origin = req.get('Origin') || req.get('Referer');
+  const allowedOrigins = ['http://localhost:3000', 'https://myflixapp-0225.netlify.app', 'https://stefv21.github.io'];
+  
+  if (origin && !allowedOrigins.some(allowed => origin.startsWith(allowed))) {
+    return res.status(403).json({ message: 'Forbidden origin' });
+  }
+  
   let newStudent = req.body;
 
   if (!newStudent.name) {
@@ -65,7 +73,7 @@ app.delete('/students/:id', (req, res) => {
 
   if (student) {
     students = students.filter((obj) => { return obj.id !== req.params.id });
-    res.status(201).send('Student ' + req.params.id + ' was deleted.');
+    res.status(201).json({ message: 'Student deleted', id: req.params.id });
   }
 });
 
@@ -75,9 +83,9 @@ app.put('/students/:name/:class/:grade', (req, res) => {
 
   if (student) {
     student.classes[req.params.class] = parseInt(req.params.grade);
-    res.status(201).send('Student ' + req.params.name + ' was assigned a grade of ' + req.params.grade + ' in ' + req.params.class);
+    res.status(201).json({ message: 'Grade assigned', name: req.params.name, class: req.params.class, grade: req.params.grade });
   } else {
-    res.status(404).send('Student with the name ' + req.params.name + ' was not found.');
+    res.status(404).json({ error: 'Student not found', name: req.params.name });
   }
 });
 
@@ -99,7 +107,7 @@ app.get('/students/:name/gpa', (req, res) => {
     res.status(201).send('' + gpa);
     //res.status(201).send(gpa);
   } else {
-    res.status(404).send('Student with the name ' + req.params.name + ' was not found.');
+    res.status(404).json({ error: 'Student not found', name: req.params.name });
   }
 });
 

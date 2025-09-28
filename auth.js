@@ -46,6 +46,14 @@ const generateJWTToken = (user, expiresIn = '1h') => {
  */
 module.exports = (router) => {
   router.post('/login', (req, res) => {
+    // Basic CSRF protection - check origin
+    const origin = req.get('Origin') || req.get('Referer');
+    const allowedOrigins = ['http://localhost:3000', 'https://myflixapp-0225.netlify.app', 'https://stefv21.github.io'];
+    
+    if (origin && !allowedOrigins.some(allowed => origin.startsWith(allowed))) {
+      return res.status(403).json({ message: 'Forbidden origin' });
+    }
+    
     passport.authenticate('local', { session: false }, (error, user, info) => {
       if (error || !user) {
         return res.status(400).json({
@@ -53,13 +61,8 @@ module.exports = (router) => {
           user: user,
         });
       }
-      req.login(user, { session: false }, (error) => {
-        if (error) {
-          res.send(error);
-        }
-        let token = generateJWTToken(user.toJSON());
-        return res.json({ user, token });
-      });
+      let token = generateJWTToken(user.toJSON());
+      return res.json({ user, token });
     })(req, res);
   });
 };

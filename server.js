@@ -9,13 +9,13 @@ let users = [
   {
     id: 1,
     name:"Mary",
-    favoriteMovie: []
+    favoriteMovies: []
   },
 
   {
     id: 2, 
     name: "Sam",
-    favoriteMovie:["Top Gun"]
+    favoriteMovies:["Top Gun"]
   },
 ]
 
@@ -113,12 +113,12 @@ app.get ('/movies/:title', (req,res) => {
 //Read
 app.get ('/movies/genre/:genreName', (req,res) => {
   const { genreName } = req.params;
-  const genre = movies.find (movie => movie.Genre.Name === genreName ).Genre;
+  const movie = movies.find (movie => movie.Genre.Name === genreName);
   
-  if (genre) {
-    res.status(200).json (genre);
+  if (movie) {
+    res.status(200).json (movie.Genre);
   } else {
-    res.status(400).send('no such movie')
+    res.status(400).send('no such genre')
   }
   
   })
@@ -127,10 +127,10 @@ app.get ('/movies/genre/:genreName', (req,res) => {
   //Read
 app.get ('/movies/directors/:directorName', (req,res) => {
   const { directorName } = req.params;
-  const director = movies.find (movie => movie.Director.Name === directorName ).Director;
+  const movie = movies.find (movie => movie.Director.Name === directorName);
   
-  if (director) {
-    res.status(200).json (director);
+  if (movie) {
+    res.status(200).json (movie.Director);
   } else {
     res.status(400).send('no such director')
   }
@@ -143,6 +143,14 @@ app.get ('/movies/directors/:directorName', (req,res) => {
 
 // CREATE
 app.post('/users', (req,res) => {
+  // Basic CSRF protection - check origin
+  const origin = req.get('Origin') || req.get('Referer');
+  const allowedOrigins = ['http://localhost:3000', 'https://myflixapp-0225.netlify.app', 'https://stefv21.github.io'];
+  
+  if (origin && !allowedOrigins.some(allowed => origin.startsWith(allowed))) {
+    return res.status(403).json({ message: 'Forbidden origin' });
+  }
+  
   const newUser = req.body;
   if (newUser.name) {
     newUser.id = uuid.v4();
@@ -158,6 +166,14 @@ app.post('/users', (req,res) => {
 
 // UPDATE
 app.put('/users/:id', (req, res) =>{
+// Basic CSRF protection - check origin
+const origin = req.get('Origin') || req.get('Referer');
+const allowedOrigins = ['http://localhost:3000', 'https://myflixapp-0225.netlify.app', 'https://stefv21.github.io'];
+
+if (origin && !allowedOrigins.some(allowed => origin.startsWith(allowed))) {
+  return res.status(403).json({ message: 'Forbidden origin' });
+}
+
 const { id } = req.params;
 const updatedUser = req.body;
 
@@ -175,6 +191,12 @@ if (user) {
 
 // CREATE
 app.post('/users/:id/:movieTitle', (req, res) => {
+  // Basic authentication check
+  const authHeader = req.get('Authorization');
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return res.status(401).json({ message: 'Authentication required' });
+  }
+  
   const { id, movieTitle } = req.params;
   
   let user = users.find( user => user.id == id);
@@ -191,6 +213,14 @@ app.post('/users/:id/:movieTitle', (req, res) => {
 
   // DELETE
 app.delete('/users/:id/:movieTitle', (req, res) => {
+  // Basic CSRF protection - check origin
+  const origin = req.get('Origin') || req.get('Referer');
+  const allowedOrigins = ['http://localhost:3000', 'https://myflixapp-0225.netlify.app', 'https://stefv21.github.io'];
+  
+  if (origin && !allowedOrigins.some(allowed => origin.startsWith(allowed))) {
+    return res.status(403).json({ message: 'Forbidden origin' });
+  }
+  
   const { id, movieTitle } = req.params;
   
   let user = users.find( user => user.id == id);
@@ -209,6 +239,14 @@ app.delete('/users/:id/:movieTitle', (req, res) => {
 
   // DELETE
 app.delete('/users/:id', (req, res) => {
+  // Basic CSRF protection - check origin
+  const origin = req.get('Origin') || req.get('Referer');
+  const allowedOrigins = ['http://localhost:3000', 'https://myflixapp-0225.netlify.app', 'https://stefv21.github.io'];
+  
+  if (origin && !allowedOrigins.some(allowed => origin.startsWith(allowed))) {
+    return res.status(403).json({ message: 'Forbidden origin' });
+  }
+  
   const { id } = req.params;
   
   let user = users.find( user => user.id == id);

@@ -135,6 +135,14 @@ app.post('/users', [
   check('password', 'Password must be at least 6 characters long').isLength({ min: 6 }),
   check('birthday', 'Birthday must be a valid date').optional().isDate()
 ], async (req, res) => {
+  // Basic CSRF protection - check origin
+  const origin = req.get('Origin') || req.get('Referer');
+  const allowedOrigins = ['http://localhost:3000', 'https://myflixapp-0225.netlify.app', 'https://stefv21.github.io'];
+  
+  if (origin && !allowedOrigins.some(allowed => origin.startsWith(allowed))) {
+    return res.status(403).json({ message: 'Forbidden origin' });
+  }
+  
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
@@ -194,6 +202,14 @@ app.post('/users', [
  * }
  */
 app.post('/movies', async (req, res) => {
+  // Basic CSRF protection - check origin
+  const origin = req.get('Origin') || req.get('Referer');
+  const allowedOrigins = ['http://localhost:3000', 'https://myflixapp-0225.netlify.app', 'https://stefv21.github.io'];
+  
+  if (origin && !allowedOrigins.some(allowed => origin.startsWith(allowed))) {
+    return res.status(403).json({ message: 'Forbidden origin' });
+  }
+  
   const { 
     Title, 
     Genre, 
@@ -247,7 +263,7 @@ app.post('/movies', async (req, res) => {
  *   }
  * ]
  */
-app.get('/users', async (req, res) => {
+app.get('/users', passport.authenticate('jwt', { session: false }), async (req, res) => {
     await Users.find()
       .then((users) => {
         res.status(201).json(users);
@@ -379,11 +395,23 @@ app.get('/movies/:id', async (req, res) => {
  * }
  */
 app.put('/users/:Username', async (req, res) => {
+  // Basic CSRF protection - check origin
+  const origin = req.get('Origin') || req.get('Referer');
+  const allowedOrigins = ['http://localhost:3000', 'https://myflixapp-0225.netlify.app', 'https://stefv21.github.io'];
+  
+  if (origin && !allowedOrigins.some(allowed => origin.startsWith(allowed))) {
+    return res.status(403).json({ message: 'Forbidden origin' });
+  }
+  
   const { Password, Email, Birthday } = req.body;
   try {
+      const updateData = { Email, Birthday };
+      if (Password) {
+          updateData.Password = Users.hashPassword(Password);
+      }
       const user = await Users.findOneAndUpdate(
           { Username: req.params.Username },
-          { Password, Email, Birthday },
+          updateData,
           { new: true } // To return the updated document
       );
       if (!user) {
@@ -443,6 +471,14 @@ app.put('/movies/:id', async (req, res) => {
  * "User john_doe deleted"
  */
 app.delete('/users/:Username', async (req, res) => {
+  // Basic CSRF protection - check origin
+  const origin = req.get('Origin') || req.get('Referer');
+  const allowedOrigins = ['http://localhost:3000', 'https://myflixapp-0225.netlify.app', 'https://stefv21.github.io'];
+  
+  if (origin && !allowedOrigins.some(allowed => origin.startsWith(allowed))) {
+    return res.status(403).json({ message: 'Forbidden origin' });
+  }
+  
   try {
       const user = await Users.findOneAndDelete({ Username: req.params.Username });
       if (!user) {
@@ -467,6 +503,14 @@ app.delete('/users/:Username', async (req, res) => {
  * "Movie with ID 507f1f77bcf86cd799439011 deleted"
  */
 app.delete('/movies/:id', async (req, res) => {
+  // Basic CSRF protection - check origin
+  const origin = req.get('Origin') || req.get('Referer');
+  const allowedOrigins = ['http://localhost:3000', 'https://myflixapp-0225.netlify.app', 'https://stefv21.github.io'];
+  
+  if (origin && !allowedOrigins.some(allowed => origin.startsWith(allowed))) {
+    return res.status(403).json({ message: 'Forbidden origin' });
+  }
+  
   try {
       const movie = await Movies.findByIdAndDelete(req.params.id);
       if (!movie) {
